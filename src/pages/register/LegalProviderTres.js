@@ -1,34 +1,80 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Alert } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { TextInputMask } from "react-native-masked-text";
 import ButtonLogin from "../../components/ButtonLogin";
+import providerServices from "../../services/ProviderServices";
 
-const LegalProviderTres = ({navigation}) => {
-    const [name, setName] = useState('');
-    const [razaoSocial, setRazaoSocial] = useState('');
-    const [phone, setPhone] = useState('');
-    const [isCorrectPhone, setIsCorrectPhone] = useState(true);
-    const [email, setEmail] = useState('');
-    const [cidade, setCidade] = useState('');
+const LegalProvider = ({ route, navigation }) => {
+    const {email, phone, password, cnpj, companyName, cidade } = route.params;
 
+    const [firstPassword, setFirstPassword] = useState('');
+    const [isCorrectFirstPass, setIsCorrectFirstPass] = useState(false);
+    const [secondPassword, setSecondPassword] = useState('');
+    const [isCorrectPassword, setIsCorrectPassword] = useState(false);
+    const [staus, setStatus] = useState();
 
-    const onChangeName = (value) => {
-        setName(value);
-    };
+    const onChangeFirstPassword = (value) => {
+        setFirstPassword(value);
+        setIsCorrectFirstPass(value.length > 6);
+    }
 
-    const onChangePhone = (value) => {
-        if (value.length === 15) { // Considerando o formato "(44) 99999-9999"
-            setPhone(value);
-            setIsCorrectPhone(true);
+    const onChangeSecondPassword = (value) => {
+        setSecondPassword(value);
+        setIsCorrectPassword(value === firstPassword);
+    }
+
+    const saveData = async () => {
+        const data = {
+            email: email,
+            phone: phone,
+            password: secondPassword,
+            cnpj: cnpj,
+            companyName: companyName || ''
+        };
+    
+        if (isCorrectFirstPass && firstPassword !== '' && isCorrectPassword && secondPassword !== '') {
+            try {
+                console.log(data);
+                const teste = await providerServices.newProviderLegal(data);
+                console.log(teste.status);
+    
+                if (teste.status === 201) {
+                    const loginData = {
+                        phone,
+                        password
+                    };
+                    
+                    try {                    
+                        const loginResponse = await providerServices.login(loginData);
+                        console.log("OLHA O TESTEEEEE");
+                        console.log(loginResponse.status);
+                        console.log(loginResponse.data);
+    
+                        if(loginResponse.status === 200) {
+                            console.log(loginResponse.data);
+                            navigation.navigate('ListServices', loginResponse.data);
+                        }
+                    } catch (loginError) {
+                        console.log(loginError);
+                        Alert.alert("Dados errados, tente novamente");
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+                if (error.response) {
+                    Alert.alert("Dados errados, tente novamente");
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                }
+            }
         } else {
-            setIsCorrectPhone(false);
+            Alert.alert("Por favor, verifique as senhas e tente novamente.");
         }
-    };
-
-    const onChangeEmail = (formatted, extracted) => {
-        setEmail(extracted);
-    };
+    }
+    //colocar a ideia de criar uma função separada para poder realizar o login
+    
 
     return (
         <View style={styles.container}>
@@ -36,66 +82,47 @@ const LegalProviderTres = ({navigation}) => {
                 style={styles.image}
                 source={require('../../assets/logoCadastro.png')}
             />
-                <Text style={styles.text}>Ainda não é cadastrado?</Text>
-                <Text style={styles.containerText}>Crie sua conta agora mesmo!</Text>
             
+            <Text style={styles.text}>Ainda não é cadastrado?</Text>
+            <Text style={styles.text}>Crie sua conta agora mesmo!</Text>
+
             <View>
-                <Text style={styles.textLabel}>Nome: </Text>
+                <Text style={styles.textLabel}>Senha</Text>
                 <TextInput
                     style={styles.input}
-                    value={name}
-                    onChangeText={onChangeName}
-                    maxLength={80}
-                    placeholder={"Nome"}
+                    value={firstPassword}
+                    onChangeText={onChangeFirstPassword}
+                    maxLength={20}
+                    secureTextEntry={true}
+                    placeholder={"Senha"}
+                    autoCapitalize="none"
                 />
-
-            <Text style={styles.textLabel}>Telefone</Text>
-                <TextInputMask
-                    style={styles.input}
-                    type={'cel-phone'}
-                    options={{
-                        maskType: 'BRL',
-                        withDDD: true,
-                        dddMask: '(99)'
-                    }}
-                    value={phone}
-                    onChangeText={onChangePhone}
-                    placeholder="Digite aqui seu telefone"
-                />
-                <Text style={styles.textLabel}>E-mail: </Text>
-                <TextInput
-                    style={styles.input}
-                    value={email}
-                    onChangeText={(email) => setEmail(email)}
-                    maxLength={30}
-                    placeholder={"E-mail"}
-                />
-                
-                <Text style={styles.textLabel}>Cidade: </Text>
-
-                <TextInput
-                    style={styles.input}
-                    value={cidade}
-                    onChangeText={(cidade) => setCidade(cidade)}
-                    maxLength={30}
-                    placeholder={"Cidade"}
-                />
+                {!isCorrectFirstPass && <Text style={{ color: '#EFFE0B' }}>Senha deve ter mais de 6 caracteres</Text>}
             </View>
-            <ButtonLogin text={"Próximo"}  
-                onPress={()=> {
-                navigation.navigate('Login')
-        }}/>
+
+            <View>
+                <Text style={styles.textLabel}>Confirmar Senha:</Text>
+                <TextInput
+                    style={styles.input}
+                    value={secondPassword}
+                    onChangeText={onChangeSecondPassword}
+                    maxLength={20}
+                    secureTextEntry={true}
+                    placeholder={"Confirmar Senha:"}
+                    autoCapitalize="none"
+                />
+                {!isCorrectPassword && <Text style={{ color: '#EFFE0B' }}>Senhas divergentes</Text>}
+            </View>
+
+            <ButtonLogin 
+                text={"Salvar"}  
+                onPress={saveData}
+            />
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
-    containerText: {
-        marginBottom: 20,
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#FFFFFF',
-    },
     container: {
         flex: 1,
         padding: 16,
@@ -127,4 +154,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LegalProviderTres;
+export default LegalProvider;

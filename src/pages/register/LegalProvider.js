@@ -5,20 +5,52 @@ import { TextInputMask } from "react-native-masked-text";
 import ButtonLogin from "../../components/ButtonLogin";
 
 const LegalProvider = ({navigation}) => {
+
     const [cnpj, setCnpj] = useState('');
     const [razaoSocial, setRazaoSocial] = useState('');
+    const [isCorrectCnpj, setIsCorrectCnpj] = useState(true);
+    const [isCorrectRazaoSocial, setIsCorrectRazaoSocial] = useState(true)
 
     const onChangeCnpj = (value) => {
         setCnpj(value)
-      }
+        if (value.length == 18) {
+            setIsCorrectCnpj(true)
+
+        } else {
+            setIsCorrectCnpj(false)
+        }  
+    }
+
+    const onChangeRazaoSocial = (value) => {
+        setRazaoSocial(value)
+        if (value.length > 5) {
+            setIsCorrectRazaoSocial(true)
+
+        } else {
+            setIsCorrectCnpj(false)
+        }  
+    }
+
+    const canNavigate = () => {
+
+        if(isCorrectCnpj && cnpj !== '' && isCorrectRazaoSocial) {
+            navigation.navigate('LegalProviderDois',  {
+                cnpj: cnpj,
+                razaoSocial: razaoSocial
+            })
+        }
+    
+    }
     return (
     <View style={styles.container}>
         <Image
             style={styles.image}
             source={require('../../assets/logoCadastro.png')}
         />
+        
         <Text style={styles.text}>Ainda não é cadastrado?</Text>
         <Text style={styles.text}>Crie sua conta agora mesmo!</Text>
+
         <View>
         <Text style={styles.textLabel}>CNPJ</Text>
         <TextInputMask
@@ -32,17 +64,23 @@ const LegalProvider = ({navigation}) => {
           placeholder="Digite aqui seu CNPJ"
         />
 
-        <Text style={styles.textLabel}>Razão Social</Text>
+        {!isCorrectCnpj?  <Text style={{ color: '#EFFE0B' }}>Cnpj inválido</Text> : ''}
 
+        <Text style={styles.textLabel}>Razão Social</Text>
         <TextInput
             style={styles.input}
             value={razaoSocial}
-            onChangeText={(text) => setRazaoSocial(text)}
-            maxLength={30}
+            onChangeText={onChangeRazaoSocial}
+            maxLength={70}
             placeholder={"Razão Social"}
         />
+
+        {!isCorrectRazaoSocial?  <Text style={{ color: '#EFFE0B' }}>Campo obrigatório</Text> : ''}
+        
       </View>
-      <ButtonLogin text={"Próximo"} onPress={() => navigation.navigate('LegalProviderDois')}/>
+
+      <ButtonLogin text={"Próximo"} onPress={canNavigate}/>
+      
       </View>
     );
 }

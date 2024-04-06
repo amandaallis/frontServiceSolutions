@@ -34,6 +34,7 @@ import Register from './src/pages/register/Register';
 import LegalProvider from './src/pages/register/LegalProvider';
 import LegalProviderDois from './src/pages/register/LegalProviderDois';
 import LegalProviderTres from './src/pages/register/LegalProviderTres';
+import TypeServiceChoice from './src/pages/register/TypeServiceChoice';
 const Stack = createStackNavigator();
 
 function App(): React.JSX.Element {
@@ -48,7 +49,7 @@ function App(): React.JSX.Element {
       <Stack.Screen name='LegalProvider' component={LegalProvider} options={{ headerShown: false }}/>
       <Stack.Screen name='LegalProviderDois' component={LegalProviderDois} options={{ headerShown: false }}/>
       <Stack.Screen name='LegalProviderTres' component={LegalProviderTres} options={{ headerShown: false }}/>
-
+      <Stack.Screen name='TypeServiceChoice' component={TypeServiceChoice} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
     </SafeAreaView>

@@ -13,9 +13,10 @@ const Login = ({navigation}) => {
 
   const onChangePhone = (value) => {
     setIsLoading(false)
-    console.log(value)
+
     if (value.length == 14) {
       setPhone(value)
+
       setIsCorrectPhone(true);
     } else {
       setIsCorrectPhone(false);
@@ -37,11 +38,10 @@ const Login = ({navigation}) => {
       phone,
       password
     };
-  
-    console.log(data);
-  
+    
     try {
       setIsLoading(true);
+
       await providerServices.login(data)
         .then((response) => {
           console.log(response.status);
@@ -53,7 +53,6 @@ const Login = ({navigation}) => {
         .catch((error) => {
           setIsLoading(false);
           Alert.alert("Dados errados, tente novamente")
-          console.log(error);
           if (error.response) {
             console.log(error.response.data);
             console.log(error.response.status);

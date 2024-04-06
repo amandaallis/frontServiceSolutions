@@ -1,34 +1,102 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, TextInput } from "react-native";
 import { TextInputMask } from "react-native-masked-text";
 import ButtonLogin from "../../components/ButtonLogin";
 
-const LegalProviderDois = ({navigation}) => {
-    const [name, setName] = useState('');
-    const [razaoSocial, setRazaoSocial] = useState('');
+const LegalProviderDois = ({ route, navigation }) => {
+    const { cnpj, razaoSocial } = route.params;
+
     const [phone, setPhone] = useState('');
-    const [isCorrectPhone, setIsCorrectPhone] = useState(true);
     const [email, setEmail] = useState('');
-    const [cidade, setCidade] = useState('');
+    const [selectedCity, setSelectedCity] = useState('');
+    const [isCorrectEmail, setIsCorrectEmail] = useState(true);
+    const [isCorrectPhone, setIsCorrectPhone] = useState(true);
+    const [cities, setCities] = useState([]);
+    const [filteredCities, setFilteredCities] = useState([]);
+    const [searchText, setSearchText] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [showCityList, setShowCityList] = useState(true);
 
+    const fetchCities = async () => {
+        try {
+            const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/municipios');
+            const data = await response.json();
+            const cityNames = data.map(city => city.nome);
+            setCities(cityNames);
+            setFilteredCities(cityNames);
+            setIsLoading(false);
+        } catch (error) {
+            console.error('Error fetching cities:', error);
+            setIsLoading(false);
+        }
+    };
 
-    const onChangeName = (value) => {
-        setName(value);
+    useEffect(() => {
+        fetchCities();
+    }, []);
+
+    const validateEmail = (email) => {
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        return regex.test(email);
+    };
+
+    const onChangeEmail = (email) => {
+        setEmail(email);
+
+        if(validateEmail(email)) {
+            setIsCorrectEmail(true);
+        } else {
+            setIsCorrectEmail(false);
+        }
     };
 
     const onChangePhone = (value) => {
-        if (value.length === 15) { // Considerando o formato "(44) 99999-9999"
-            setPhone(value);
+        setPhone(value);
+        if (value.length === 14) {
             setIsCorrectPhone(true);
         } else {
             setIsCorrectPhone(false);
         }
     };
 
-    const onChangeEmail = (formatted, extracted) => {
-        setEmail(extracted);
+    const handleSearch = (text) => {
+        setSearchText(text);
+        const filtered = cities.filter(city => city.toLowerCase().includes(text.toLowerCase()));
+        setFilteredCities(filtered);
+        setShowCityList(true);
     };
+
+    const selectCity = (city) => {
+        setSelectedCity(city);
+        setSearchText(city);
+        setShowCityList(false);
+    };
+
+    const renderItem = ({ item }) => {
+        return (
+            <TouchableOpacity
+                style={styles.cityItem}
+                onPress={() => selectCity(item)}
+            >
+                <Text>{item}</Text>
+            </TouchableOpacity>
+        );
+    };
+
+    const canNavigate = () => {
+
+        if(isCorrectEmail && email !== '' && isCorrectPhone && phone !== '' && selectedCity !== '') {
+            navigation.navigate('LegalProviderTres', {
+                email: email,
+                phone: phone,
+                password: '',
+                cnpj: cnpj,
+                razaoSocial: razaoSocial,
+                cidade: selectedCity
+            });
+        }
+    
+    }
 
     return (
         <View style={styles.container}>
@@ -36,20 +104,11 @@ const LegalProviderDois = ({navigation}) => {
                 style={styles.image}
                 source={require('../../assets/logoCadastro.png')}
             />
-                <Text style={styles.text}>Ainda não é cadastrado?</Text>
-                <Text style={styles.containerText}>Crie sua conta agora mesmo!</Text>
+            <Text style={styles.text}>Ainda não é cadastrado?</Text>
+            <Text style={styles.containerText}>Crie sua conta agora mesmo!</Text>
             
             <View>
-                <Text style={styles.textLabel}>Nome: </Text>
-                <TextInput
-                    style={styles.input}
-                    value={name}
-                    onChangeText={onChangeName}
-                    maxLength={80}
-                    placeholder={"Nome"}
-                />
-
-            <Text style={styles.textLabel}>Telefone</Text>
+                <Text style={styles.textLabel}>Telefone</Text>
                 <TextInputMask
                     style={styles.input}
                     type={'cel-phone'}
@@ -62,30 +121,48 @@ const LegalProviderDois = ({navigation}) => {
                     onChangeText={onChangePhone}
                     placeholder="Digite aqui seu telefone"
                 />
+                {!isCorrectPhone && <Text style={{ color: '#EFFE0B' }}>Telefone inválido</Text>}
+                
                 <Text style={styles.textLabel}>E-mail: </Text>
                 <TextInput
                     style={styles.input}
+                    keyboardType="email-address"
+                    placeholder="Digite seu email"
+                    onChangeText={onChangeEmail}
                     value={email}
-                    onChangeText={(email) => setEmail(email)}
-                    maxLength={30}
-                    placeholder={"E-mail"}
+                    autoCapitalize="none"
                 />
-                
-                <Text style={styles.textLabel}>Cidade: </Text>
+                {!isCorrectEmail && <Text style={{ color: '#EFFE0B' }}>Email inválido</Text>}
 
+                <Text style={styles.textLabel}>Cidade: </Text>
                 <TextInput
                     style={styles.input}
-                    value={cidade}
-                    onChangeText={(cidade) => setCidade(cidade)}
-                    maxLength={30}
-                    placeholder={"Cidade"}
+                    placeholder="Digite a cidade"
+                    onChangeText={handleSearch}
+                    value={searchText}
+                    onFocus={() => setShowCityList(true)} // Mostrar a lista quando o input é focado
                 />
+                <View style={styles.cityList}>
+                    {isLoading ? (
+                        <Text>Carregando cidades...</Text>
+                    ) : showCityList ? (
+                        <FlatList
+                            data={filteredCities}
+                            renderItem={renderItem}
+                            keyExtractor={(item, index) => index.toString()}
+                            style={styles.cityFlatList}
+                        />
+                    ) : (
+                        <Text>{selectedCity}</Text>
+                    )}
+                </View>
             </View>
-            <ButtonLogin text={"Próximo"}  
-                onPress={()=> {
-                navigation.navigate('LegalProviderTres')
-            }}/>        
-            </View>
+
+            <ButtonLogin 
+                text={"Próximo"}  
+                onPress={canNavigate}
+            />
+        </View>
     );
 };
 
@@ -124,7 +201,25 @@ const styles = StyleSheet.create({
     textLabel: {
         margin: 10,
         color:"#FFF",
-    }
+    },
+    cityList: {
+        backgroundColor: '#FFFF',
+        width: 310,
+        maxHeight: 200,
+        borderColor: '#FFF',
+        borderWidth: 1,
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        marginBottom: 10,
+    },
+    cityFlatList: {
+        flexGrow: 0,
+    },
+    cityItem: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#DDD',
+    },
 });
 
 export default LegalProviderDois;

@@ -10,7 +10,7 @@ const Register = ({navigation}) => {
         <Text style={styles.text}>Crie sua conta agora mesmo!</Text>
         <Text style={styles.textIam}>Eu sou: </Text>
         <View style={styles.buttonView}>
-            <CustomButton label="Pessoa jurídica" onPress={() => {navigation.navigate('LegalProvider')}} />
+            <CustomButton style= {{marginTop: 10}} label="Pessoa jurídica" onPress={() => {navigation.navigate('LegalProvider')}} />
             <CustomButton label="Pessoa física" onPress={() =>  {navigation.navigate('LegalProvider')}} />
         </View>
     </View>
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
         padding: 16,
-    },
+    }, 
 });
 
 export default Register;
