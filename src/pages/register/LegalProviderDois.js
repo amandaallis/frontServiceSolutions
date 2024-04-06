@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, TextInput } from "react-native";
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, TextInput, Alert } from "react-native";
 import { TextInputMask } from "react-native-masked-text";
 import ButtonLogin from "../../components/ButtonLogin";
+import providerServices from "../../services/ProviderServices";
 
 const LegalProviderDois = ({ route, navigation }) => {
     const { cnpj, razaoSocial } = route.params;
@@ -40,20 +41,34 @@ const LegalProviderDois = ({ route, navigation }) => {
         return regex.test(email);
     };
 
-    const onChangeEmail = (email) => {
+    const onChangeEmail = async (email) => {
         setEmail(email);
 
         if(validateEmail(email)) {
-            setIsCorrectEmail(true);
+            try {
+                const {data} = await providerServices.alredyExistEmail(email);
+                if(!data) {
+                    setIsCorrectEmail(true);
+                } else {
+                    Alert.alert("E-mail já cadastrado")
+                }
+            } catch (error) {
+                console.log(error)
+            }
         } else {
             setIsCorrectEmail(false);
         }
     };
 
-    const onChangePhone = (value) => {
+    const onChangePhone = async (value) => {
         setPhone(value);
         if (value.length === 14) {
-            setIsCorrectPhone(true);
+            const {data} = await providerServices.alredyExistPhone(value);
+            if(!data) {
+                setIsCorrectPhone(true);
+            } else {
+                Alert.alert("E-mail já cadastrado")
+            }
         } else {
             setIsCorrectPhone(false);
         }

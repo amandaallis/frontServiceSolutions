@@ -34,35 +34,26 @@ const Login = ({navigation}) => {
   }
 
   const handleSignIn = async () => {
-    const data = {
-      phone,
-      password
-    };
-    
     try {
+      const data = {
+        phone,
+        password
+      };
       setIsLoading(true);
 
-      await providerServices.login(data)
-        .then((response) => {
-          console.log(response.status);
-
-          if(response.status == 200) {
-            navigation.navigate('ListServices');
-          }
-        })
-        .catch((error) => {
-          setIsLoading(false);
-          Alert.alert("Dados errados, tente novamente")
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          }
-        });
+      const response = await providerServices.login(data);
+      
+      if(response && response.status == 200) {
+        navigation.navigate('ListServices');
+      }
+      
     } catch (error) {
+      Alert.alert("Dados errados, tente novamente");
+      setIsLoading(false);
       console.log(error);
     }
     finally {
+      setIsLoading(false)
       setIsCorrectPhone(true);
       setIsCorrectPass(true)
     }

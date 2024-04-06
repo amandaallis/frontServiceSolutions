@@ -12,8 +12,8 @@ const LegalProvider = ({navigation}) => {
     const [isCorrectRazaoSocial, setIsCorrectRazaoSocial] = useState(true)
 
     const onChangeCnpj = (value) => {
-        setCnpj(value)
         if (value.length == 18) {
+            setCnpj(value)
             setIsCorrectCnpj(true)
 
         } else {
@@ -27,12 +27,11 @@ const LegalProvider = ({navigation}) => {
             setIsCorrectRazaoSocial(true)
 
         } else {
-            setIsCorrectCnpj(false)
+            setIsCorrectRazaoSocial(false)
         }  
     }
 
     const canNavigate = () => {
-
         if(isCorrectCnpj && cnpj !== '' && isCorrectRazaoSocial) {
             navigation.navigate('LegalProviderDois',  {
                 cnpj: cnpj,

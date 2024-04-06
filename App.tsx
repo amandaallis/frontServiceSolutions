@@ -6,29 +6,14 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
 import Login from './src/pages/login/Login';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
-  useColorScheme,
-  View,
 } from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Choice from './src/pages/choice/Choice';
-import providerServices from './src/services/ProviderServices';
 import ListServices from './src/pages/listServices/ListServices';
 import Register from './src/pages/register/Register';
 import LegalProvider from './src/pages/register/LegalProvider';

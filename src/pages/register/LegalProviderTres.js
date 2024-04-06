@@ -12,7 +12,6 @@ const LegalProvider = ({ route, navigation }) => {
     const [isCorrectFirstPass, setIsCorrectFirstPass] = useState(false);
     const [secondPassword, setSecondPassword] = useState('');
     const [isCorrectPassword, setIsCorrectPassword] = useState(false);
-    const [staus, setStatus] = useState();
 
     const onChangeFirstPassword = (value) => {
         setFirstPassword(value);
@@ -35,26 +34,20 @@ const LegalProvider = ({ route, navigation }) => {
     
         if (isCorrectFirstPass && firstPassword !== '' && isCorrectPassword && secondPassword !== '') {
             try {
-                console.log(data);
                 const teste = await providerServices.newProviderLegal(data);
-                console.log(teste.status);
     
                 if (teste.status === 201) {
                     const loginData = {
                         phone,
                         password
                     };
-                    
                     try {                    
-                        const loginResponse = await providerServices.login(loginData);
-                        console.log("OLHA O TESTEEEEE");
-                        console.log(loginResponse.status);
-                        console.log(loginResponse.data);
-    
+                        const loginResponse = await providerServices.login(loginData);  
+                       
                         if(loginResponse.status === 200) {
-                            console.log(loginResponse.data);
                             navigation.navigate('ListServices', loginResponse.data);
                         }
+
                     } catch (loginError) {
                         console.log(loginError);
                         Alert.alert("Dados errados, tente novamente");
@@ -73,9 +66,7 @@ const LegalProvider = ({ route, navigation }) => {
             Alert.alert("Por favor, verifique as senhas e tente novamente.");
         }
     }
-    //colocar a ideia de criar uma função separada para poder realizar o login
     
-
     return (
         <View style={styles.container}>
             <Image
