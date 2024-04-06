@@ -26,7 +26,12 @@ function App(): React.JSX.Element {
   return (
     <SafeAreaView style={styles.backgroundStyle}>
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Choice'>
+      <Stack.Navigator
+        initialRouteName='Choice'
+        screenOptions={{
+          animationEnabled: false
+        }}
+      >
       <Stack.Screen name='Login' component={Login} options={{ headerShown: false }}/>
       <Stack.Screen name='ListServices' component={ListServices} options={{ headerShown: false }}/>
       <Stack.Screen name='Choice' component={Choice} options={{ headerShown: false }}/>       

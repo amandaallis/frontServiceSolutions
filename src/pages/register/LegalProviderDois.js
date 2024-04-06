@@ -67,7 +67,7 @@ const LegalProviderDois = ({ route, navigation }) => {
             if(!data) {
                 setIsCorrectPhone(true);
             } else {
-                Alert.alert("E-mail já cadastrado")
+                Alert.alert("Celular já cadastrado")
             }
         } else {
             setIsCorrectPhone(false);

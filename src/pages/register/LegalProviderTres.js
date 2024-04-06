@@ -23,6 +23,28 @@ const LegalProvider = ({ route, navigation }) => {
         setIsCorrectPassword(value === firstPassword);
     }
 
+    const loginNextPage = async() => {
+        try {
+            const loginData = {
+                phone: phone,
+                password: secondPassword
+            };
+            console.log('====================================');
+            console.log(loginData);
+            console.log('====================================');     
+            console.log(loginData)
+                        
+        const loginResponse = await providerServices.login(loginData);  
+        console.log(loginResponse)
+        if(loginResponse.status === 200) {
+        navigation.navigate('ListServices', loginResponse.data);
+        }
+    } catch (loginError) {
+        console.log(loginError);
+        Alert.alert("Dados errados, tente novamente");
+    } 
+    }
+
     const saveData = async () => {
         const data = {
             email: email,
@@ -34,25 +56,18 @@ const LegalProvider = ({ route, navigation }) => {
     
         if (isCorrectFirstPass && firstPassword !== '' && isCorrectPassword && secondPassword !== '') {
             try {
-                const teste = await providerServices.newProviderLegal(data);
-    
-                if (teste.status === 201) {
-                    const loginData = {
-                        phone,
-                        password
-                    };
-                    try {                    
-                        const loginResponse = await providerServices.login(loginData);  
-                       
-                        if(loginResponse.status === 200) {
-                            navigation.navigate('ListServices', loginResponse.data);
-                        }
-
-                    } catch (loginError) {
-                        console.log(loginError);
-                        Alert.alert("Dados errados, tente novamente");
-                    }
-                }
+                const response = await providerServices.newProviderLegal(data);
+                console.log("Segunda pass")
+                console.log(secondPassword)
+                
+                const loginData = {
+                    phone,
+                    password: secondPassword
+                };
+                console.log("funciona carai")
+                console.log(response)
+                console.log(loginData)
+                loginNextPage();
             } catch (error) {
                 console.log(error);
                 if (error.response) {
@@ -66,6 +81,22 @@ const LegalProvider = ({ route, navigation }) => {
             Alert.alert("Por favor, verifique as senhas e tente novamente.");
         }
     }
+/*    try {   
+     const loginData = {
+                        phone,
+                        password
+                    };                 
+        const loginResponse = await providerServices.login(loginData);  
+       console.log(loginResponse)
+       //TENTAR COLOCAR EM FUNÇÕES DIFERENTES
+        if(loginResponse.status === 200) {
+            navigation.navigate('ListServices', loginResponse.data);
+        }
+
+    } catch (loginError) {
+        console.log(loginError);
+        Alert.alert("Dados errados, tente novamente");
+    }*/
     
     return (
         <View style={styles.container}>
