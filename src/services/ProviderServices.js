@@ -34,19 +34,22 @@ class ProviderServices {
     }
 
     async listServices(token) {
-        return axios({
-            url: `http://localhost:3000/all-services?Bearer${token}`,
-            method: "GET",
-            timeout: 5000,
-            headers: {
-                Accept: 'application/json'
-            }
-        }).then((response) => {
-            return Promise.resolve(response);
-        }).catch((error) => {
+        try {
+            const response = await axios({
+                url: "http://localhost:3000/all-services",
+                method: "GET",
+                timeout: 5000,
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+            }});
+            
+            return Promise.resolve(response.data);
+        } catch (error) {
             return Promise.reject(error);
-        });
+        }
     }
+    
 
     async alredyExistEmail(email) {
         return axios({

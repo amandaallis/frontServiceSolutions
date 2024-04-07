@@ -24,6 +24,7 @@ const LegalProvider = ({ route, navigation }) => {
     }
 
     const loginNextPage = async() => {
+        console.log("Entrou no loginNextPage")
         try {
             const loginData = {
                 phone: phone,
@@ -37,7 +38,7 @@ const LegalProvider = ({ route, navigation }) => {
         const loginResponse = await providerServices.login(loginData);  
         console.log(loginResponse)
         if(loginResponse.status === 200) {
-        navigation.navigate('ListServices', loginResponse.data);
+        navigation.navigate('TypeServiceChoice', loginResponse.data);
         }
     } catch (loginError) {
         console.log(loginError);
@@ -64,10 +65,11 @@ const LegalProvider = ({ route, navigation }) => {
                     phone,
                     password: secondPassword
                 };
-                console.log("funciona carai")
-                console.log(response)
-                console.log(loginData)
-                loginNextPage();
+                console.log("Registrou")
+                if(response !== null) {
+                    await loginNextPage();
+                }
+                
             } catch (error) {
                 console.log(error);
                 if (error.response) {
