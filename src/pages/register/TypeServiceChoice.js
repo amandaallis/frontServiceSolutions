@@ -23,6 +23,33 @@ const TypeServiceChoice = ({ route, navigation }) => {
             console.error("Erro ao buscar serviços:", error.message);
         }
     };
+    const transformCheckedState = (checkedState) => {
+        const transformedArray = [];
+    
+        Object.keys(checkedState).forEach(key => {
+            if(servicesChecked[key] == true) {
+                checkedState[key] = "ON"
+            }
+            else if(servicesChecked[key] == false) {
+                checkedState[key] = "OFF"
+            }
+    
+            transformedArray.push({
+                serviceListId: parseInt(key), 
+                status: checkedState[key]
+            });
+        });
+
+        saveData(transformedArray);
+    };
+
+    const saveData = async (data) => {
+        try {
+            const response = await providerServices.newTypeService(data, token);
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const renderItem = ({ item }) => {
         const handleToggle = () => {
@@ -63,7 +90,8 @@ const TypeServiceChoice = ({ route, navigation }) => {
             <TouchableOpacity 
                 style={styles.button}
                 onPress={() => {
-                    console.log('Próximo botão pressionado', servicesChecked);
+                    const transformedChecked = transformCheckedState(servicesChecked);
+                    console.log('Próximo botão pressionado', transformedChecked);
                 }}>
                 <Text style={styles.text}>Concluir</Text>
             </TouchableOpacity>
@@ -71,53 +99,5 @@ const TypeServiceChoice = ({ route, navigation }) => {
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#ffff',
-    },
-    image: {
-        marginTop: 50,
-        marginBottom: 10,
-    },
-    title: {
-        fontSize: 23,
-        fontWeight: 'bold',
-        color: '#3D3D4C',
-    },
-    titleDois: {
-        fontSize: 23,
-        fontWeight: 'bold',
-        color: '#3D3D4C',
-        marginBottom: 50
-    },
-    button: {
-        backgroundColor: '#2D4B73',
-        padding: 10,
-        width: 180,
-        borderRadius: 5,
-        margin: 80,
-    },
-    text: {
-        fontFamily: 'Roboto',
-        color: '#FFF',
-        textAlign: 'center',
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    textType: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#3D3D4C',
-    },
-    itens: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 5
-    }
-});
 
 export default TypeServiceChoice;

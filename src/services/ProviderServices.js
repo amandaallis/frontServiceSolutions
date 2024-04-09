@@ -80,6 +80,26 @@ class ProviderServices {
             return Promise.reject(error);
         });
     }
+
+    async newTypeService(data, token) {
+        return axios({
+            url: `http://localhost:3000/new-type-service`,
+            method: "POST",
+            data: data,
+            timeout: 5000,
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        }).then((response) => {
+            console.log("Response:", response.data);  // Log da resposta
+            return Promise.resolve(response);
+        }).catch((error) => {
+            console.log("Error:", error);  // Log do erro
+            return Promise.reject(error);
+        });
+    }
+    
 }
 const providerServices = new ProviderServices()
 export default providerServices;
