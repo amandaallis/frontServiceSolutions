@@ -20,6 +20,8 @@ import LegalProvider from './src/pages/register/LegalProvider';
 import LegalProviderDois from './src/pages/register/LegalProviderDois';
 import LegalProviderTres from './src/pages/register/LegalProviderTres';
 import TypeServiceChoice from './src/pages/register/TypeServiceChoice';
+import Sucess from './src/pages/register/Sucess';
+import Teste from './src/pages/register/Teste';
 const Stack = createStackNavigator();
 
 function App(): React.JSX.Element {
@@ -29,7 +31,7 @@ function App(): React.JSX.Element {
       <Stack.Navigator
         initialRouteName='Choice'
         screenOptions={{
-          animationEnabled: false
+          animationEnabled: false,
         }}
       >
       <Stack.Screen name='Login' component={Login} options={{ headerShown: false }}/>
@@ -40,6 +42,11 @@ function App(): React.JSX.Element {
       <Stack.Screen name='LegalProviderDois' component={LegalProviderDois} options={{ headerShown: false }}/>
       <Stack.Screen name='LegalProviderTres' component={LegalProviderTres} options={{ headerShown: false }}/>
       <Stack.Screen name='TypeServiceChoice' component={TypeServiceChoice} options={{ headerShown: false }}/>
+      <Stack.Screen name='Sucess' component={Sucess} options={{ headerShown: false,  gestureEnabled: false }}/>
+      <Stack.Screen name='Teste' component={Teste} options={{ headerShown: false, gestureEnabled: false }}/>
+
+
+
       </Stack.Navigator>
     </NavigationContainer>
     </SafeAreaView>

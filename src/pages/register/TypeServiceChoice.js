@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import providerServices from "../../services/ProviderServices";
 import CheckBox from '@react-native-community/checkbox';
+import Sucess from "./Sucess";
 
 const TypeServiceChoice = ({ route, navigation }) => {
     const [services, setServices] = useState([]);
@@ -46,6 +47,7 @@ const TypeServiceChoice = ({ route, navigation }) => {
     const saveData = async (data) => {
         try {
             const response = await providerServices.newTypeService(data, token);
+            navigation.navigate('Sucess')
         } catch (error) {
             console.log(error)
         }
@@ -91,13 +93,61 @@ const TypeServiceChoice = ({ route, navigation }) => {
                 style={styles.button}
                 onPress={() => {
                     const transformedChecked = transformCheckedState(servicesChecked);
-                    console.log('Próximo botão pressionado', transformedChecked);
                 }}>
                 <Text style={styles.text}>Concluir</Text>
             </TouchableOpacity>
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#ffff',
+    },
+    image: {
+        marginTop: 50,
+        marginBottom: 10,
+    },
+    title: {
+        fontSize: 23,
+        fontWeight: 'bold',
+        color: '#3D3D4C',
+    },
+    titleDois: {
+        fontSize: 23,
+        fontWeight: 'bold',
+        color: '#3D3D4C',
+        marginBottom: 50
+    },
+    button: {
+        backgroundColor: '#2D4B73',
+        padding: 10,
+        width: 180,
+        borderRadius: 5,
+        margin: 80,
+    },
+    text: {
+        fontFamily: 'Roboto',
+        color: '#FFF',
+        textAlign: 'center',
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    textType: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#3D3D4C',
+    },
+    itens: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 5
+    }
+});
 
 
 export default TypeServiceChoice;

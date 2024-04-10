@@ -11,7 +11,7 @@ const Choice = ({navigation}) => {
       <ButtonLogin 
         text={'Sou cliente'}
         onPress={()=> {
-          navigation.navigate('Login')
+          navigation.navigate('LoginClient')
         }}
         
       />
