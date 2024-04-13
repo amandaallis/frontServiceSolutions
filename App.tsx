@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import Login from './src/pages/login/Login';
+import Login from './src/pages/loginProvider/Login';
 import {
   SafeAreaView,
   StyleSheet,
@@ -22,6 +22,7 @@ import LegalProviderTres from './src/pages/register/LegalProviderTres';
 import TypeServiceChoice from './src/pages/register/TypeServiceChoice';
 import Sucess from './src/pages/register/Sucess';
 import Teste from './src/pages/register/Teste';
+import LoginClient from './src/pages/loginClient/LoginClient';
 const Stack = createStackNavigator();
 
 function App(): React.JSX.Element {
@@ -44,6 +45,7 @@ function App(): React.JSX.Element {
       <Stack.Screen name='TypeServiceChoice' component={TypeServiceChoice} options={{ headerShown: false }}/>
       <Stack.Screen name='Sucess' component={Sucess} options={{ headerShown: false,  gestureEnabled: false }}/>
       <Stack.Screen name='Teste' component={Teste} options={{ headerShown: false, gestureEnabled: false }}/>
+      <Stack.Screen name='LoginClient' component={LoginClient} options={{ headerShown: false,  gestureEnabled: false }}/>
 
 
 

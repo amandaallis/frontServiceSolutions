@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator, Alert } from 'react-native';
 import ButtonLogin from '../../components/ButtonLogin';
-import providerServices from "../../services/ProviderServices"
 import { TextInputMask } from 'react-native-masked-text';
+import providerClient from '../../services/ProviderClient';
+import providerServices from '../../services/ProviderServices';
 
-const Login = ({navigation}) => {
+const LoginClient = ({navigation}) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [isCorrectPhone, setIsCorrectPhone] = useState(true);
   const [isCorrectPass, setIsCorrectPass] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
 
   const onChangePhone = (value) => {
     setIsLoading(false)
@@ -41,7 +43,7 @@ const Login = ({navigation}) => {
       };
       setIsLoading(true);
 
-      const response = await providerServices.login(data);
+      const response = await providerClient.login(data);
       
       if(response && response.status == 200) {
         navigation.navigate('ListServices');
@@ -65,7 +67,7 @@ const Login = ({navigation}) => {
         style={styles.image}
         source={require('../../assets/logoLogin.png')}
       />
-
+  
       <Text style={styles.welcomeText}>Seja bem-vindo(a)!</Text>
       <Text style={styles.welcomeTextSecond}>Acesse sua conta!</Text>
 
@@ -147,4 +149,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default LoginClient;
