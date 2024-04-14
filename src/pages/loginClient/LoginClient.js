@@ -103,7 +103,7 @@ const LoginClient = ({navigation}) => {
 
       <ButtonLogin text="Acessar" onPress={handleSignIn} />
       <Text style={{color: '#FFFFFF', marginTop: 10}}>Ainda não é cadastrado?</Text>
-      <Text style={{color: '#FFFFFF', marginTop: 5}} onPress={() => navigation.navigate('Cadastro')}>Crie sua conta agora mesmo!</Text>
+      <Text style={{color: '#FFFFFF', marginTop: 5}} onPress={() => navigation.navigate('RegisterClientPagOn')}>Crie sua conta agora mesmo!</Text>
       {isLoading && <ActivityIndicator size="large" color="#FFFFFF" />}
     </View>
   );

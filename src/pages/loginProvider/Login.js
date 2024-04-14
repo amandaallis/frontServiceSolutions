@@ -44,7 +44,7 @@ const Login = ({navigation}) => {
       const response = await providerServices.login(data);
       
       if(response && response.status == 200) {
-        navigation.navigate('ListServices');
+        navigation.navigate('TestePage');
       }
       
     } catch (error) {

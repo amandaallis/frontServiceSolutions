@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Image, Alert, ActivityIndicator } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { TextInputMask } from "react-native-masked-text";
-import ButtonLogin from "../../components/ButtonLogin";
-import providerServices from "../../services/ProviderServices";
+import React, { useState } from 'react';
+import { Alert, Image, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, TextInput } from 'react-native-paper';
+import ButtonLogin from '../../components/ButtonLogin';
+import providerClient from '../../services/ProviderClient';
 
-const LegalProvider = ({ route, navigation }) => {
-    const { email, phone, password, cnpj, companyName, cidade } = route.params;
+const RegisterClientPageTwo = ({ route, navigation }) => {
+    const { name, email, phone } = route.params;
 
+    const [hidePass1, setHidePass1] = useState(true);
+    const [hidePass2, setHidePass2] = useState(true);
     const [firstPassword, setFirstPassword] = useState('');
     const [isCorrectFirstPass, setIsCorrectFirstPass] = useState(false);
     const [secondPassword, setSecondPassword] = useState('');
@@ -24,18 +25,25 @@ const LegalProvider = ({ route, navigation }) => {
         setIsCorrectPassword(value === firstPassword);
     }
 
+    const togglePasswordVisibility01 = () => {
+        setHidePass1(!hidePass1);
+    }
+
+    const togglePasswordVisibility02 = () => {
+        setHidePass2(!hidePass2);
+    }
+
     const loginNextPage = async () => {
-        setIsLoading(true);
         try {
             const loginData = {
                 phone: phone,
                 password: secondPassword
             };
                         
-            const loginResponse = await providerServices.login(loginData);  
+            const loginResponse = await providerClient.login(loginData);  
 
             if (loginResponse.status === 200) {
-                navigation.navigate('TypeServiceChoice', loginResponse.data);
+                navigation.navigate('Sucess', { data: loginResponse.data });
             }
         } catch (loginError) {
             console.log(loginError);
@@ -49,15 +57,14 @@ const LegalProvider = ({ route, navigation }) => {
         setIsLoading(true);
         const data = {
             email: email,
+            name,
             phone: phone,
             password: secondPassword,
-            cnpj: cnpj,
-            companyName: companyName || ''
         };
     
         if (isCorrectFirstPass && firstPassword !== '' && isCorrectPassword && secondPassword !== '') {
             try {
-                const response = await providerServices.newProviderLegal(data);
+                const response = await providerClient.newRequester(data);
                 
                 if (response !== null) {
                     await loginNextPage();
@@ -79,28 +86,34 @@ const LegalProvider = ({ route, navigation }) => {
             setIsLoading(false);
         }
     }
-    
+
     return (
         <View style={styles.container}>
             <Image
                 style={styles.image}
                 source={require('../../assets/logoCadastro.png')}
             />
-            
             <Text style={styles.text}>Ainda não é cadastrado?</Text>
             <Text style={styles.text}>Crie sua conta agora mesmo!</Text>
 
             <View>
                 <Text style={styles.textLabel}>Senha</Text>
+
                 <TextInput
                     style={styles.input}
                     value={firstPassword}
                     onChangeText={onChangeFirstPassword}
                     maxLength={20}
-                    secureTextEntry={true}
-                    placeholder={"Senha"}
+                    secureTextEntry={hidePass1}
+                    placeholder={"Digite sua senha:"}
                     autoCapitalize="none"
+                    right={
+                        <TextInput.Icon icon="eye" onPress={togglePasswordVisibility01} />
+                    }
+                    outlineColor='#FFF'
+                    activeUnderlineColor='transparent'
                 />
+
                 {!isCorrectFirstPass && <Text style={{ color: '#EFFE0B' }}>Senha deve ter mais de 6 caracteres</Text>}
             </View>
 
@@ -111,18 +124,20 @@ const LegalProvider = ({ route, navigation }) => {
                     value={secondPassword}
                     onChangeText={onChangeSecondPassword}
                     maxLength={20}
-                    secureTextEntry={true}
+                    secureTextEntry={hidePass2}
                     placeholder={"Confirmar Senha:"}
                     autoCapitalize="none"
+                    right={
+                        <TextInput.Icon icon="eye" onPress={togglePasswordVisibility02} />
+                    }
+                    outlineColor='#FFF'
+                    activeUnderlineColor='transparent'
                 />
                 {!isCorrectPassword && <Text style={{ color: '#EFFE0B' }}>Senhas divergentes</Text>}
             </View>
+            <ButtonLogin text="Próximo" onPress={saveData} />
+            {isLoading ? <ActivityIndicator size="large" color="#FFFFFF"/> : null}
 
-            <ButtonLogin 
-                text={"Salvar"}  
-                onPress={saveData}
-            />
-            {isLoading && <ActivityIndicator size="large" color="#FFFFFF" style={{ marginTop: 20 }} />}
         </View>
     );
 }
@@ -148,15 +163,14 @@ const styles = StyleSheet.create({
         width: 310,
         height: 40,
         borderColor: '#FFF',
-        borderWidth: 1,
         borderRadius: 8,
         paddingHorizontal: 10,
         marginBottom: 10,
     },
     textLabel: {
         margin: 10,
-        color:"#FFF",
-    }
-});
+        color: "#FFF",
+    },
+})
 
-export default LegalProvider;
+export default RegisterClientPageTwo;
