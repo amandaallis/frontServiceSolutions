@@ -99,6 +99,21 @@ class ProviderServices {
             return Promise.reject(error);
         });
     }
+    async getUserInfo(token) {
+        return axios({
+            url: `http://localhost:3000/user-info`,
+            method: "GET",
+            timeout: 5000,
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        }).then((response) => {
+            return Promise.resolve(response);
+        }).catch((error) => {
+            return Promise.reject(error);
+        });
+    }
     
 }
 const providerServices = new ProviderServices()

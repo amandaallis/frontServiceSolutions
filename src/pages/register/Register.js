@@ -11,7 +11,7 @@ const Register = ({navigation}) => {
         <Text style={styles.textIam}>Eu sou: </Text>
         <View style={styles.buttonView}>
             <CustomButton style= {{marginTop: 10}} label="Pessoa jurídica" onPress={() => {navigation.navigate('LegalProvider')}} />
-            <CustomButton label="Pessoa física" onPress={() =>  {navigation.navigate('LegalProvider')}} />
+            <CustomButton label="Pessoa física" onPress={() =>  {navigation.navigate('RegisterPersonalOne')}} />
         </View>
     </View>
   );

@@ -14,7 +14,7 @@ const Login = ({navigation}) => {
   const onChangePhone = (value) => {
     setIsLoading(false)
 
-    if (value.length == 14) {
+    if (value.length == 15) {
       setPhone(value)
 
       setIsCorrectPhone(true);
@@ -44,8 +44,12 @@ const Login = ({navigation}) => {
       const response = await providerServices.login(data);
       
       if(response && response.status == 200) {
-        navigation.navigate('TestePage');
-      }
+        console.log("Entrou no response data")
+        console.log(response.data)
+        navigation.navigate('ServicesHome', { 
+          screen: 'Home', 
+          params: { token: response.data.token } 
+        });       }
       
     } catch (error) {
       Alert.alert("Dados errados, tente novamente");
@@ -74,11 +78,6 @@ const Login = ({navigation}) => {
         <TextInputMask
           style={styles.input}
           type={'cel-phone'}
-          options={{
-            maskType: 'BRL',
-            withDDD: true,
-            dddMask: '(44)'
-          }}
           value={phone}
           onChangeText={onChangePhone}
           placeholder="Digite aqui seu telefone"

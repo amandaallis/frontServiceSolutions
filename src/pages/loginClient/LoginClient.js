@@ -46,9 +46,12 @@ const LoginClient = ({navigation}) => {
       const response = await providerClient.login(data);
       
       if(response && response.status == 200) {
-        navigation.navigate('ListServices');
-      }
-      
+        console.log("Entrou no response data")
+        navigation.navigate('ServicesHome', { 
+          screen: 'Home', 
+          params: { token: response.data.token } 
+        });       
+      }  
     } catch (error) {
       Alert.alert("Dados errados, tente novamente");
       setIsLoading(false);

@@ -24,6 +24,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import ServicesHome from './src/pages/servicesPageHome/ServicesHome';
 import RegisterClientPagOn from './src/pages/registerClient/RegisterClientPagOne';
 import RegisterClientPageTwo from './src/pages/registerClient/RegisterClientPageTwo';
+import RegisterPersonalOne from './src/pages/registerPersonalProvider/RegisterPersonalOne';
+import RegisterPersonTwo from './src/pages/registerPersonalProvider/RegisterPersonTwo';
+import ChoiceServices from './src/pages/choiceServices/ChoiceServices';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -88,10 +91,13 @@ function App(): React.JSX.Element {
           <Stack.Screen name='LegalProviderTres' component={LegalProviderTres} options={{ headerShown: false }}/>
           <Stack.Screen name='TypeServiceChoice' component={TypeServiceChoice} options={{ headerShown: false }}/>
           <Stack.Screen name='Sucess' component={Sucess} options={{ headerShown: false, gestureEnabled: false }}/>
-          <Stack.Screen name='TestePage' component={MyTabs} options={{ headerShown: false, gestureEnabled: false }}/>
+          <Stack.Screen name='ServicesHome' component={MyTabs} options={{ headerShown: false, gestureEnabled: false }}/>
           <Stack.Screen name='LoginClient' component={LoginClient} options={{ headerShown: false, gestureEnabled: false }}/>
           <Stack.Screen name='RegisterClientPagOn' component={RegisterClientPagOn} options={{ headerShown: false}}/>
           <Stack.Screen name='RegisterClientPageTwo' component={RegisterClientPageTwo} options={{ headerShown: false}}/>
+          <Stack.Screen name='RegisterPersonalOne' component={RegisterPersonalOne} options={{ headerShown: false}}/>
+          <Stack.Screen name='RegisterPersonTwo' component={RegisterPersonTwo} options={{ headerShown: false}}/>
+          <Stack.Screen name='ChoiceServices' component={ChoiceServices} options={{ headerShown: false}}/>
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
