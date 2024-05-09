@@ -191,7 +191,7 @@ const RegisterPersonTwo = ({ route, navigation }) => {
                     placeholder="Digite a cidade"
                     onChangeText={handleSearch}
                     value={searchText}
-                    onFocus={() => setShowCityList(true)} // Mostrar a lista quando o input é focado
+                    onFocus={() => setShowCityList(true)}
                 />
                 <View style={styles.cityList}>
                     {isLoading ? (

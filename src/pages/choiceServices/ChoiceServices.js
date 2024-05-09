@@ -1,21 +1,33 @@
 import { Image, StyleSheet, Text, View, ScrollView } from "react-native";
-import CardService from "../../components/CardService";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import providerServices from "../../services/ProviderServices";
+import ChoiceProviderByService from "./ChoiceProviderByService";
+import { useNavigation } from '@react-navigation/native';
 
-const ChoiceServices = () => {
+const ChoiceServices = ({ token }) => {
+    const navigation = useNavigation();
+
+    const getProvidersByServices = async (service) => {
+        try {
+            const providers = await providerServices.getProvidersByServices(token, service);
+            const data = {
+                token,
+                providers,
+                service,
+            }
+
+        navigation.navigate('ChoiceProviderByService', { 
+          screen: 'Home', 
+          params: {data: data} 
+        });   
+            
+        } catch (error) {
+            console.log(error)
+        }
+    } 
+    
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity style={styles.loginButton}>
-                    <Text style={styles.text}>Serviços</Text>
-                </TouchableOpacity> 
-                <TouchableOpacity style={styles.loginButton}>
-                    <Text style={styles.text2}>Status{"\n"}das solicitações</Text>
-                </TouchableOpacity>   
-                <TouchableOpacity style={styles.loginButton}>
-                    <Text style={styles.text2}>Status{"\n"}das solicitações</Text>
-                </TouchableOpacity>          
-            </View>
             <View style={styles.cardsContainer}>
                 <View style={styles.card}>
                     <Image
@@ -52,13 +64,16 @@ const ChoiceServices = () => {
                     />
                     <Text style={styles.name}>Montador</Text>
                 </View>
-                <View style={styles.card}>
-                    <Image
-                        style={styles.image}
-                        source={require('../../assets/pedreiro.png')}
+                <TouchableOpacity  
+                    style={styles.card}
+                    onPress={() => getProvidersByServices("Pedreiro") }
+                >
+                <Image
+                    style={styles.image}
+                    source={require('../../assets/pedreiro.png')}
                     />
                     <Text style={styles.name}>Pedreiro</Text>
-                </View>
+                </TouchableOpacity>                   
             </View>
         </View>
     );

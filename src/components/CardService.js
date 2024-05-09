@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const CardService = ({typeService, nameClient, local, number}) => {
+const CardService = ({typeService, nameClient, local, number, onPress}) => {
     return (
         <View style={styles.background}>
           <View style={styles.card}>
@@ -20,8 +20,11 @@ const CardService = ({typeService, nameClient, local, number}) => {
               <Text style={styles.cardDescription}>{number}</Text>
             </View>
             <View style={styles.cardActions}>
-              <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Ver serviço</Text>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={onPress}  
+              >
+                <Text style={styles.buttonText}>Solicitar serviço</Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -3,7 +3,7 @@ import axios from "axios";
 class ProviderServices {
     async login (data) {
         return axios({
-            url: "http://localhost:3000/login-provider",
+            url: "https://back-service-solutions-edea454839be.herokuapp.com/login-provider",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -19,7 +19,7 @@ class ProviderServices {
 
     async newProviderLegal(data) {
         return axios({
-            url: "http://localhost:3000/register-provider?type=legal",
+            url: "https://back-service-solutions-edea454839be.herokuapp.com/register-provider?type=legal",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -36,7 +36,7 @@ class ProviderServices {
     async listServices(token) {
         try {
             const response = await axios({
-                url: "http://localhost:3000/all-services",
+                url: "https://back-service-solutions-edea454839be.herokuapp.com/all-services",
                 method: "GET",
                 timeout: 5000,
                 headers: {
@@ -53,7 +53,7 @@ class ProviderServices {
 
     async alredyExistEmail(email) {
         return axios({
-            url: `http://localhost:3000/email-alredy-registred?email=${email}`,
+            url: `https://back-service-solutions-edea454839be.herokuapp.com/email-alredy-registred?email=${email}`,
             method: "GET",
             timeout: 5000,
             headers: {
@@ -68,7 +68,7 @@ class ProviderServices {
     
     async alredyExistPhone(phone) {
         return axios({
-            url: `http://localhost:3000/phone-alredy-registred?phone=${phone}`,
+            url: `https://back-service-solutions-edea454839be.herokuapp.com/phone-alredy-registred?phone=${phone}`,
             method: "GET",
             timeout: 5000,
             headers: {
@@ -83,7 +83,7 @@ class ProviderServices {
 
     async newTypeService(data, token) {
         return axios({
-            url: `http://localhost:3000/new-type-service`,
+            url: `https://back-service-solutions-edea454839be.herokuapp.com/new-type-service`,
             method: "POST",
             data: data,
             timeout: 5000,
@@ -101,7 +101,7 @@ class ProviderServices {
     }
     async getUserInfo(token) {
         return axios({
-            url: `http://localhost:3000/user-info`,
+            url: `https://back-service-solutions-edea454839be.herokuapp.com/user-info`,
             method: "GET",
             timeout: 5000,
             headers: {
@@ -114,7 +114,26 @@ class ProviderServices {
             return Promise.reject(error);
         });
     }
-    
+
+    async getProvidersByServices(token, service) {
+        console.log("Entrou no getProvider")
+        console.log(service)
+        const url = `https://back-service-solutions-edea454839be.herokuapp.com/available-provider/${service}`;
+        try {
+            const response = await axios({
+                url: url,
+                method: "GET",
+                timeout: 5000,
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 const providerServices = new ProviderServices()
 export default providerServices;

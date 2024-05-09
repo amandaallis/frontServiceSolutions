@@ -5,6 +5,8 @@ import providerServices from "../../services/ProviderServices";
 import { TextInputMask } from 'react-native-masked-text';
 
 const Login = ({navigation}) => {
+  console.log("Acabou de entrar no navigation")
+  console.log(navigation)
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [isCorrectPhone, setIsCorrectPhone] = useState(true);
@@ -40,6 +42,7 @@ const Login = ({navigation}) => {
         password
       };
       setIsLoading(true);
+
 
       const response = await providerServices.login(data);
       

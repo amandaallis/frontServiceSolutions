@@ -4,8 +4,12 @@ import CardService from '../../components/CardService';
 import ChoiceServices from '../choiceServices/ChoiceServices';
 import providerServices from '../../services/ProviderServices';
 
-const ServicesHome = ({route, navigation}) => {
-  const { token } = route.params;
+const ServicesHome = ({ route, navigation }) => {
+  console.log('====================================');
+  console.log("OLHA O TOKEEEEEEEEN");
+  console.log('====================================');
+  const {token } = route.params;
+  console.log(token)
   console.log("SERVICES HOME")
   const [type, setType] = useState('')
   console.log(token)
@@ -42,7 +46,7 @@ useEffect (() => {
           nameClient={'Amanda'}
           number={'(44) 99101-66665'}
   />*/}
-  {type == 'requester'? <ChoiceServices/> : ''}
+  {type == 'requester'? <ChoiceServices token={token} /> : ''}
        
       </View>
     </ScrollView>
@@ -54,10 +58,10 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   background: {
+    height:' 100%',
     backgroundColor: '#FFF',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 20, // Adiciona um padding para evitar que o último item fique muito próximo da borda inferior
   },
 });
 

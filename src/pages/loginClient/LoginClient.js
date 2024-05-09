@@ -55,7 +55,7 @@ const LoginClient = ({navigation}) => {
     } catch (error) {
       Alert.alert("Dados errados, tente novamente");
       setIsLoading(false);
-      console.log(error);
+      console.log(error.response);
     }
     finally {
       setIsLoading(false)

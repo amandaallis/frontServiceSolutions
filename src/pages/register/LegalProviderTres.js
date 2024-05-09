@@ -6,7 +6,7 @@ import ButtonLogin from "../../components/ButtonLogin";
 import providerServices from "../../services/ProviderServices";
 
 const LegalProvider = ({ route, navigation }) => {
-    const { email, phone, password, cnpj, companyName, cidade } = route.params;
+    const { email, phone, password, cnpj, razaoSocial, cidade } = route.params;
 
     const [firstPassword, setFirstPassword] = useState('');
     const [isCorrectFirstPass, setIsCorrectFirstPass] = useState(false);
@@ -36,12 +36,15 @@ const LegalProvider = ({ route, navigation }) => {
 
     const loginNextPage = async () => {
         setIsLoading(true);
+       
         try {
             const loginData = {
                 phone: phone,
                 password: secondPassword
             };
-                        
+
+            console.log("Chegou aqui no loginData")
+           
             const loginResponse = await providerServices.login(loginData);  
 
             if (loginResponse.status === 200) {
@@ -56,13 +59,14 @@ const LegalProvider = ({ route, navigation }) => {
     }
 
     const saveData = async () => {
+        console.log(razaoSocial)
         setIsLoading(true);
         const data = {
             email: email,
             phone: phone,
             password: secondPassword,
             cnpj: cnpj,
-            companyName: companyName || '',
+            companyName: razaoSocial,
             city: cidade
         };
 
