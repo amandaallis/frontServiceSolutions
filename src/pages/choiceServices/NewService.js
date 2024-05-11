@@ -69,12 +69,15 @@ const NewService = ({ navigation, route }) => {
             const data = {
                 typeServiceId: serviceListItem,
                 providerId: item.providerId,
+                description: serviceDetails,
                 street: rua,
                 number: Number(numero),
                 district: bairro,
                 city: selectedCity,
                 cep: cep
             }
+            console.log("OLHA O DATA")
+            console.log(data)
             if(isCorrectRua, isCorrectNumero, isCorrectBairro, isCorrectCep, isCorrectCity) {
                 const response = await providerClient.newService(data, token)
 
@@ -88,6 +91,7 @@ const NewService = ({ navigation, route }) => {
            
         } catch (error) {
             Alert.alert("Verifique os dados e tente novamente");
+            console.log(error.response.data)
             console.log(error)
         }
     }

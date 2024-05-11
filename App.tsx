@@ -9,7 +9,6 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import Choice from './src/pages/choice/Choice';
-import ListServices from './src/pages/listServices/ListServices';
 import Register from './src/pages/register/Register';
 import LegalProvider from './src/pages/register/LegalProvider';
 import LegalProviderDois from './src/pages/register/LegalProviderDois';
@@ -31,6 +30,7 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import ChoiceProviderByService from './src/pages/choiceServices/ChoiceProviderByService';
 import NewService from './src/pages/choiceServices/NewService';
 import SucessService from './src/pages/choiceServices/SucessService';
+import ListServicesProvider from './src/pages/listServices/ListServicesProvider';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -102,7 +102,6 @@ function App(): React.JSX.Element {
           }}
         >
           <Stack.Screen name='Login' component={Login} options={{ headerShown: false }}/>
-          <Stack.Screen name='ListServices' component={ListServices} options={{ headerShown: false }}/>
           <Stack.Screen name='Choice' component={Choice} options={{ headerShown: false }}/>       
           <Stack.Screen name='Cadastro' component={Register} options={{ headerShown: false }}/>
           <Stack.Screen name='LegalProvider' component={LegalProvider} options={{ headerShown: false }}/>
@@ -120,6 +119,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name='ChoiceProviderByService' component={MyTabs} options={{ headerShown: false}}/>
           <Stack.Screen name='NewService' component={NewService} options={{ headerShown: false }}/>
           <Stack.Screen name='SucessService' component={SucessService} options={{ headerShown: false }}/>
+          <Stack.Screen name='ListServicesProvider' component={ListServicesProvider} options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

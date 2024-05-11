@@ -5,8 +5,6 @@ import providerServices from "../../services/ProviderServices";
 import { TextInputMask } from 'react-native-masked-text';
 
 const Login = ({navigation}) => {
-  console.log("Acabou de entrar no navigation")
-  console.log(navigation)
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [isCorrectPhone, setIsCorrectPhone] = useState(true);
@@ -16,7 +14,7 @@ const Login = ({navigation}) => {
   const onChangePhone = (value) => {
     setIsLoading(false)
 
-    if (value.length == 15) {
+    if (value.length == 14) {
       setPhone(value)
 
       setIsCorrectPhone(true);
@@ -47,8 +45,6 @@ const Login = ({navigation}) => {
       const response = await providerServices.login(data);
       
       if(response && response.status == 200) {
-        console.log("Entrou no response data")
-        console.log(response.data)
         navigation.navigate('ServicesHome', { 
           screen: 'Home', 
           params: { token: response.data.token } 
@@ -78,13 +74,18 @@ const Login = ({navigation}) => {
 
       <View>
         <Text style={styles.textLabel}>Telefone</Text>
-        <TextInputMask
-          style={styles.input}
-          type={'cel-phone'}
-          value={phone}
-          onChangeText={onChangePhone}
-          placeholder="Digite aqui seu telefone"
-        />
+          <TextInputMask
+                    style={styles.input}
+                    type={'cel-phone'}
+                    options={{
+                        maskType: 'BRL',
+                        withDDD: true,
+                        dddMask: '(99)'
+                    }}
+                    value={phone}
+                    onChangeText={onChangePhone}
+                    placeholder="Digite aqui seu telefone"
+                />
        {!isCorrectPhone && <Text style={{ color: '#EFFE0B' }}>O número de telefone é obrigatório</Text>}
       </View>
 

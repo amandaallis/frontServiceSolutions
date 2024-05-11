@@ -1,53 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
-import CardService from '../../components/CardService';
 import ChoiceServices from '../choiceServices/ChoiceServices';
+import ListServicesProvider from '../listServices/ListServicesProvider';
 import providerServices from '../../services/ProviderServices';
 
 const ServicesHome = ({ route, navigation }) => {
-  console.log('====================================');
-  console.log("OLHA O TOKEEEEEEEEN");
-  console.log('====================================');
-  const {token } = route.params;
-  console.log(token)
-  console.log("SERVICES HOME")
-  const [type, setType] = useState('')
-  console.log(token)
+  const { token } = route.params;
+  const [type, setType] = useState('');
 
   const typeUser = async () => {
     try {
-        const response = await providerServices.getUserInfo(token);
-        console.log("Esse é o response")
-        console.log(response.data)
+      const response = await providerServices.getUserInfo(token);
+      console.log("olha o responseee")
+      console.log(response.data.providerId)
+      console.log(response.data.requesterId)
 
-        if(response.data.requesterId == null) {
-          console.log("é provider")
-          setType('provider')
-        } 
-        
-        else if(response.data.requesterId !== null) {
-          console.log("é requester")
-          setType('requester')
-        }
+
+      if (response.data.requesterId !== undefined) {
+        console.log("é requester")
+        setType('requester');
+      }
+      else if (response.data.providerId !== undefined) {
+        console.log("é provider")
+        setType('provider')
+     
+      }
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
-}
+  };
 
-useEffect (() => {
-  typeUser();
-}, [])
+  useEffect(() => {
+    typeUser();
+  }, []);
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.background}>
-       {/*} <CardService
-          typeService={'Chapeiro'}
-          local={'Campo Mourão'}
-          nameClient={'Amanda'}
-          number={'(44) 99101-66665'}
-  />*/}
-  {type == 'requester'? <ChoiceServices token={token} /> : ''}
-       
+        {/* Render ChoiceServices if type is requester, ListServicesProvider if type is provider */}
+        {type === 'requester' && <ChoiceServices token={token} />}
+        {type === 'provider' && <ListServicesProvider token={token} />}
       </View>
     </ScrollView>
   );
@@ -58,7 +50,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   background: {
-    height:' 100%',
+    flex: 1, // Use flex instead of height for dynamic sizing
     backgroundColor: '#FFF',
     justifyContent: 'center',
     alignItems: 'center',

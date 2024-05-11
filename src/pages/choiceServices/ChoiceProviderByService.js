@@ -15,6 +15,7 @@ const ChoiceProviderByService = ({ navigation, route }) => {
 
   const renderCardService = ({ item }) => (
       <CardService
+        text={'Solicitar serviço'}
         typeService={service}
         nameClient={item.userName}
         local={item.city}

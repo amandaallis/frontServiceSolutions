@@ -29,7 +29,7 @@ const Sucess = ({ navigation }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setModalVisible(false);
-            navigation.navigate('TestePage');
+            navigation.navigate('ListServicesProvider');
         }, 4000);
 
         return () => clearTimeout(timer);
