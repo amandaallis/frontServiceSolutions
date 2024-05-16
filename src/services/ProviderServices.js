@@ -134,6 +134,22 @@ class ProviderServices {
             throw error;
         }
     }
+    async getTypeServiceById (id) {
+        const url = `https://back-service-solutions-edea454839be.herokuapp.com/service/${id}`;
+        try {
+            const response = await axios({
+                url: url,
+                method: "GET",
+                timeout: 5000,
+                headers: {
+                    Accept: 'application/json',
+                }
+            });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 const providerServices = new ProviderServices()
 export default providerServices;

@@ -3,8 +3,11 @@ import { View, FlatList } from "react-native";
 import CardService from "../../components/CardService";
 import { Text } from "react-native-paper";
 import providerClient from "../../services/ProviderClient";
+import { useNavigation } from "@react-navigation/native";
 
 const ListServicesProvider = ({ token }) => {
+  const navigation = useNavigation();
+
   console.log("OLHA O TOKEN")
   console.log(token)
   const [servicesByProvider, setServicesByProvider] = useState([]);
@@ -27,11 +30,11 @@ const ListServicesProvider = ({ token }) => {
   const renderCardService = ({ item }) => (
     <CardService
       text={'Ver solicitação'}
-      typeService={item.service}
+      typeService={"Serviços de " + item.serviceName}
       nameClient={item.userName}
       local={item.city}
       number={item.phone}
-      onPress={() => navigation.navigate('NewService', data )}
+      onPress={() => navigation.navigate('ServiceSpecifications', item)}
     />
   );
 

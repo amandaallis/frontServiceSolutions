@@ -31,6 +31,9 @@ import ChoiceProviderByService from './src/pages/choiceServices/ChoiceProviderBy
 import NewService from './src/pages/choiceServices/NewService';
 import SucessService from './src/pages/choiceServices/SucessService';
 import ListServicesProvider from './src/pages/listServices/ListServicesProvider';
+import ServiceSpecifications from './src/pages/listServices/ServiceSpecifications';
+import SendMessage from './src/pages/listServices/SendMessage';
+import SucessListServices from './src/pages/listServices/SucessListServices';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -73,6 +76,8 @@ const MyTabs = ({route}) => {
       <Tab.Screen name="Histórico de serviços" component={SettingsScreen} options={{ headerShown: false }}/>
       <Tab.Screen name='ChoiceProviderByService' component={ChoiceProviderByService} options={{ headerShown: false, tabBarButton: () => null}}/>
       <Tab.Screen name="NewService" component={NewService} options={{ tabBarButton: () => null, headerShown: false }} />
+      <Tab.Screen name="ServiceSpecifications" component={ServiceSpecifications} options={{ tabBarButton: () => null, headerShown: false }} />
+      <Tab.Screen name="SendMessage" component={SendMessage} options={{ tabBarButton: () => null, headerShown: false }} />
     </Tab.Navigator>
   );
 };
@@ -120,6 +125,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name='NewService' component={NewService} options={{ headerShown: false }}/>
           <Stack.Screen name='SucessService' component={SucessService} options={{ headerShown: false }}/>
           <Stack.Screen name='ListServicesProvider' component={ListServicesProvider} options={{ headerShown: false }}/>
+          <Stack.Screen name='SucessListServices' component={SucessListServices} options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
