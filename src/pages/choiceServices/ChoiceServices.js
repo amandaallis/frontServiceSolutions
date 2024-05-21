@@ -10,6 +10,7 @@ const ChoiceServices = ({ token }) => {
     const getProvidersByServices = async (service) => {
         try {
             const providers = await providerServices.getProvidersByServices(token, service);
+
             const data = {
                 token,
                 providers,
@@ -29,41 +30,56 @@ const ChoiceServices = ({ token }) => {
     return (
         <View style={styles.container}>
             <View style={styles.cardsContainer}>
-                <View style={styles.card}>
-                    <Image
-                        style={styles.image}
-                        source={require('../../assets/eletricista.png')}
-                    />
+                <TouchableOpacity  
+                    style={styles.card}
+                    onPress={() => getProvidersByServices("Eletricista") }
+                >              
+                <Image
+                    style={styles.image}
+                    source={require('../../assets/eletricista.png')}
+                />
                     <Text style={styles.name}>Eletricista</Text>
-                </View>
-                <View style={styles.card}>
-                    <Image
-                        style={styles.image}
-                        source={require('../../assets/encanador.png')}
-                    />
+                </TouchableOpacity>
+                <TouchableOpacity  
+                    style={styles.card}
+                    onPress={() => getProvidersByServices("Encanador") }
+                >                       
+                <Image
+                    style={styles.image}
+                    source={require('../../assets/encanador.png')}
+                />
                     <Text style={styles.name}>Encanador</Text>
-                </View>
-                <View style={styles.card}>
-                    <Image
-                        style={styles.image}
-                        source={require('../../assets/servicos_limpeza.png')}
-                    />
+                </TouchableOpacity>
+                <TouchableOpacity  
+                    style={styles.card}
+                    onPress={() => getProvidersByServices("Serviços de limpeza") }
+                >               
+                <Image
+                    style={styles.image}
+                    source={require('../../assets/servicos_limpeza.png')}
+                />
                     <Text style={styles.name}>Serviços de Limpeza</Text>
-                </View>
-                <View style={styles.card}>
-                    <Image
-                        style={styles.image}
-                        source={require('../../assets/jardineiro.png')}
-                    />
+                </TouchableOpacity>
+                <TouchableOpacity  
+                    style={styles.card}
+                    onPress={() => getProvidersByServices("Jardineiro") }
+                >    
+                <Image
+                    style={styles.image}
+                    source={require('../../assets/jardineiro.png')}
+                />
                     <Text style={styles.name}>Jardineiro</Text>
-                </View>
-                <View style={styles.card}>
-                    <Image
-                        style={styles.image}
-                        source={require('../../assets/montador.png')}
-                    />
+                </TouchableOpacity>
+                <TouchableOpacity  
+                    style={styles.card}
+                    onPress={() => getProvidersByServices("Montador de Móveis") }
+                >                    
+                <Image
+                    style={styles.image}
+                    source={require('../../assets/montador.png')}
+                />
                     <Text style={styles.name}>Montador</Text>
-                </View>
+                </TouchableOpacity>
                 <TouchableOpacity  
                     style={styles.card}
                     onPress={() => getProvidersByServices("Pedreiro") }
@@ -109,12 +125,12 @@ const styles = StyleSheet.create({
         color: '#2D4B73',
         marginTop: 0,
         fontWeight: 'bold',
-        textAlign: 'center', // Alinha o texto ao centro
+        textAlign: 'center',
     },
     cardsContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent: 'space-around', // Espaçamento entre os cards
+        justifyContent: 'space-around',
     },
     card: {
         backgroundColor: "#2D4B73",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, LogBox } from "react-native";
 import CardService from "../../components/CardService";
 import { Text } from "react-native-paper";
 import providerClient from "../../services/ProviderClient";
@@ -8,17 +8,16 @@ import { useNavigation } from "@react-navigation/native";
 const ListServicesProvider = ({ token }) => {
   const navigation = useNavigation();
 
-  console.log("OLHA O TOKEN")
-  console.log(token)
   const [servicesByProvider, setServicesByProvider] = useState([]);
+  LogBox.ignoreLogs([
+    'VirtualizedLists should never be nested'
+  ]);
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await providerClient.getRequiredServiceByProvider(token);
+        const response = await providerClient.getRequiredServiceByProvider({token});
         setServicesByProvider(response.data);
-        console.log("Assim que ficou services provider")
-        console.log(servicesByProvider)
       } catch (error) {
         console.error("Error fetching services:", error);
       }
@@ -45,12 +44,11 @@ const ListServicesProvider = ({ token }) => {
           <Text>No data found</Text>
         </View>
       ) : (
+        
         <FlatList
           data={servicesByProvider}
           renderItem={renderCardService}
           keyExtractor={(item) => {
-            console.log("OLha o item")
-            console.log(item)
             item.id.toString()
           }}
         />

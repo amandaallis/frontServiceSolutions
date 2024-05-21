@@ -6,7 +6,7 @@ import providerClient from '../../services/ProviderClient';
 import { FlatList } from 'react-native-gesture-handler';
 
 const RegisterPersonTwo = ({ route, navigation }) => {
-    const { name, email, phone } = route.params;
+    const { name, email, phone, cpf } = route.params;
 
     const [hidePass1, setHidePass1] = useState(true);
     const [hidePass2, setHidePass2] = useState(true);
@@ -108,7 +108,8 @@ const RegisterPersonTwo = ({ route, navigation }) => {
             name,
             phone: phone,
             password: secondPassword,
-            city: selectedCity
+            city: selectedCity,
+            cpf
         };
         console.log(data)
     

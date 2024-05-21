@@ -34,7 +34,6 @@ const CardService = ({text, typeService, nameClient, local, number, onPress}) =>
     
     const styles = StyleSheet.create({
       background: {
-        backgroundColor: "#FFF",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",

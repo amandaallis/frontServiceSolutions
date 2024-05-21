@@ -4,10 +4,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Linking } from "react-native"
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ServiceSpecifications = ({route, navigation}) => {
-    console.log("Assim que chegou o route")
-    console.log(route)
     const { userName, city, phone, serviceName, description, adress } = route.params;
-    console.log("Assim que está o adress")
     return (
         <View style={styles.container}>
         <View style={styles.card}>
@@ -90,7 +87,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         padding: 10,
         color: "#000",
-        flexWrap: "wrap", // Garante que o texto quebra de linha conforme necessário
+        flexWrap: "wrap",
       },
       userInfo: {
         flexDirection: "row",

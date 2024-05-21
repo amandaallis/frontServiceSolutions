@@ -92,10 +92,10 @@ class ProviderServices {
                 Authorization: `Bearer ${token}`
             }
         }).then((response) => {
-            console.log("Response:", response.data);  // Log da resposta
+            console.log("Response:", response.data);
             return Promise.resolve(response);
         }).catch((error) => {
-            console.log("Error:", error);  // Log do erro
+            console.log("Error:", error);
             return Promise.reject(error);
         });
     }
@@ -116,8 +116,6 @@ class ProviderServices {
     }
 
     async getProvidersByServices(token, service) {
-        console.log("Entrou no getProvider")
-        console.log(service)
         const url = `https://back-service-solutions-edea454839be.herokuapp.com/available-provider/${service}`;
         try {
             const response = await axios({

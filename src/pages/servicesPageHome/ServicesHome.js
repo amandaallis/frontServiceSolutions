@@ -11,17 +11,11 @@ const ServicesHome = ({ route, navigation }) => {
   const typeUser = async () => {
     try {
       const response = await providerServices.getUserInfo(token);
-      console.log("olha o responseee")
-      console.log(response.data.providerId)
-      console.log(response.data.requesterId)
-
-
+    
       if (response.data.requesterId !== undefined) {
-        console.log("é requester")
         setType('requester');
       }
       else if (response.data.providerId !== undefined) {
-        console.log("é provider")
         setType('provider')
      
       }
@@ -37,7 +31,6 @@ const ServicesHome = ({ route, navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.background}>
-        {/* Render ChoiceServices if type is requester, ListServicesProvider if type is provider */}
         {type === 'requester' && <ChoiceServices token={token} />}
         {type === 'provider' && <ListServicesProvider token={token} />}
       </View>
@@ -50,7 +43,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   background: {
-    flex: 1, // Use flex instead of height for dynamic sizing
+    flex: 1,
     backgroundColor: '#FFF',
     justifyContent: 'center',
     alignItems: 'center',

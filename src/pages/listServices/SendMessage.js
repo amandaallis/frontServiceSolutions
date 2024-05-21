@@ -3,11 +3,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Text } from "react-native-paper";
 
 const SendMessage = ({route, navigation}) => {
-    console.log("Assim que chegou o route")
-    console.log(route)
-    console.log("Agora o phone")
     const {phone } = route.params;
-    console.log(phone)
 
     const onPressWhatsApp = () => {
         const phoneNumber = phone;

@@ -19,7 +19,7 @@ class ProviderClient {
 
     async newRequester(data) {
         return axios({
-            url: "https://back-service-solutions-edea454839be.herokuapp.com/register-requester",
+            url: "https://back-service-solutions-edea454839be.herokuapp.com/register-requester?type=personal",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -67,8 +67,6 @@ class ProviderClient {
     }
 
     async getRequiredServiceByProvider({token}) {
-        console.log("Entrou requiredService")
-        console.log(token)
         return axios({
             url: `https://back-service-solutions-edea454839be.herokuapp.com/list-solicitations-by-provider`,
             method: "GET",

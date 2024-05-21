@@ -34,6 +34,7 @@ import ListServicesProvider from './src/pages/listServices/ListServicesProvider'
 import ServiceSpecifications from './src/pages/listServices/ServiceSpecifications';
 import SendMessage from './src/pages/listServices/SendMessage';
 import SucessListServices from './src/pages/listServices/SucessListServices';
+import SucessProvider from './src/pages/registerPersonalProvider/SucessProvider';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -84,7 +85,7 @@ const MyTabs = ({route}) => {
 
 
 function App(): React.JSX.Element {
-  useEffect(() => {
+ /* useEffect(() => {
     const backAction = () => {
       return true; // Impede a navegação de voltar
     };
@@ -95,7 +96,7 @@ function App(): React.JSX.Element {
     );
 
     return () => backHandler.remove();
-  }, []);
+  }, []);*/
 
   return (
     <SafeAreaView style={styles.backgroundStyle}>
@@ -126,6 +127,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name='SucessService' component={SucessService} options={{ headerShown: false }}/>
           <Stack.Screen name='ListServicesProvider' component={ListServicesProvider} options={{ headerShown: false }}/>
           <Stack.Screen name='SucessListServices' component={SucessListServices} options={{ headerShown: false }}/>
+          <Stack.Screen name='SucessProvider' component={SucessProvider} options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

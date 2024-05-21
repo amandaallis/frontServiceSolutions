@@ -5,13 +5,12 @@ const Teste = ({ navigation }) => {
     
     useLayoutEffect(() => {
         navigation.setOptions({
-            gestureEnabled: false // Desabilita o gesto de voltar
+            gestureEnabled: false
         });
     }, [navigation]);
 
     useEffect(() => {
         const backAction = () => {
-            // Não faz nada ao pressionar o botão de voltar
             return true;
         };
 
@@ -20,7 +19,7 @@ const Teste = ({ navigation }) => {
             backAction
         );
 
-        return () => backHandler.remove(); // Remove o listener ao desfocar a tela
+        return () => backHandler.remove();
     }, []);
 
     return (
