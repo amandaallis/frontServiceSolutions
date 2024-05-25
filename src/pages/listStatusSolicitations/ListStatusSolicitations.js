@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { View, FlatList, LogBox, StyleSheet } from "react-native";
+import { View, SectionList, LogBox, StyleSheet } from "react-native";
 import CardService from "../../components/CardService";
 import { Text } from "react-native-paper";
 import providerClient from "../../services/ProviderClient";
 import { useNavigation } from "@react-navigation/native";
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 
-const ListServicesProvider = ({ token }) => {
+const ListStatusSolicitations = ({ token }) => {
   const navigation = useNavigation();
-  const [loading, setLoading] = useState(true);
+
   const [servicesByProvider, setServicesByProvider] = useState([]);
-  
+  const [servicesRejected, setServicesRejected] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   LogBox.ignoreLogs([
     'VirtualizedLists should never be nested'
   ]);
@@ -18,11 +20,14 @@ const ListServicesProvider = ({ token }) => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await providerClient.getRequiredServiceByProvider({ token: token, status: "OPEN" });
+        const response = await providerClient.getRequiredServiceByProvider({ token: token, status: "APPROVED" });
+        const responseRejected = await providerClient.getRequiredServiceByProvider({ token: token, status: "REJECTED" });
+
         setServicesByProvider(response.data);
+        setServicesRejected(responseRejected.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching services:", error);
-      } finally {
         setLoading(false);
       }
     };
@@ -32,7 +37,7 @@ const ListServicesProvider = ({ token }) => {
 
   const renderCardService = ({ item }) => (
     <CardService
-      text={'Ver solicitação'}
+      text={item.status}
       typeService={"Serviços de " + item.serviceName}
       nameClient={item.userName}
       local={item.city}
@@ -42,7 +47,7 @@ const ListServicesProvider = ({ token }) => {
   );
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.background}>
       {loading ? (
         <View style={styles.shimmerContainer}>
           {[...Array(5)].map((_, index) => (
@@ -53,14 +58,21 @@ const ListServicesProvider = ({ token }) => {
           ))}
         </View>
       ) : (
-        servicesByProvider.length === 0 ? (
+        servicesByProvider.length === 0 && servicesRejected.length === 0 ? (
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
             <Text>No data found</Text>
           </View>
         ) : (
-          <FlatList
-            data={servicesByProvider}
+          <SectionList
+            sections={[
+              { title: "", data: servicesByProvider },
+              { title: "", data: servicesRejected },
+            ]}
             renderItem={renderCardService}
+            renderSectionHeader={({ section: { title } }) => (
+              <View style={styles.sectionHeader}>
+              </View>
+            )}
             keyExtractor={(item) => item.id.toString()}
           />
         )
@@ -82,6 +94,20 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderRadius: 8
   },
+  sectionHeader: {
+    backgroundColor: "#f4f4f4",
+    margin: 0
+  },
+  sectionHeaderText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  background: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
-export default ListServicesProvider;
+export default ListStatusSolicitations;

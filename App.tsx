@@ -35,11 +35,13 @@ import ServiceSpecifications from './src/pages/listServices/ServiceSpecification
 import SendMessage from './src/pages/listServices/SendMessage';
 import SucessListServices from './src/pages/listServices/SucessListServices';
 import SucessProvider from './src/pages/registerPersonalProvider/SucessProvider';
+import ListStatusSolicitations from './src/pages/listStatusSolicitations/ListStatusSolicitations';
+import SettingsScreen from './src/pages/SettingsScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
+/*
 function SettingsScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -47,7 +49,7 @@ function SettingsScreen() {
     </View>
   );
 }
-
+*/
 const MyTabs = ({route}) => {
     const routeName = getFocusedRouteNameFromRoute(route);
 
@@ -62,6 +64,7 @@ const MyTabs = ({route}) => {
             return <Icon name={iconName} size={25} color={focused || routeName === 'NewService' || routeName === 'ChoiceProviderByService' ? "#2D4B73" : "#C8C3C2"} />;
           } else if (route.name === 'Status das Solicitações') {
             iconName = focused ? 'list' : 'list';
+            return <Icon name={iconName} size={25} color={focused || routeName === 'NewService' || routeName === 'ChoiceProviderByService' ? "#2D4B73" : "#C8C3C2"} />;
           } else if(route.name === 'Histórico de serviços') {
             iconName = focused? 'history' : 'history';
           }
@@ -73,7 +76,7 @@ const MyTabs = ({route}) => {
       })}
     >
       <Tab.Screen name="Home" component={ServicesHome} options={{ headerShown: true }} />
-      <Tab.Screen name="Status das Solicitações" component={SettingsScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Status das Solicitações" component={ListStatusSolicitations} options={{ headerShown: true }}/>
       <Tab.Screen name="Histórico de serviços" component={SettingsScreen} options={{ headerShown: false }}/>
       <Tab.Screen name='ChoiceProviderByService' component={ChoiceProviderByService} options={{ headerShown: false, tabBarButton: () => null}}/>
       <Tab.Screen name="NewService" component={NewService} options={{ tabBarButton: () => null, headerShown: false }} />

@@ -66,9 +66,29 @@ class ProviderClient {
         });
     }
 
-    async getRequiredServiceByProvider({token}) {
+    async getRequiredServiceByProvider({status, token}) {
+        console.log("OLHA O STATUUUS")
+        console.log(status)
         return axios({
-            url: `https://back-service-solutions-edea454839be.herokuapp.com/list-solicitations-by-provider`,
+            url: `https://back-service-solutions-edea454839be.herokuapp.com/list-solicitations-by-provider/${status}`,
+            method: "GET",
+            timeout: 5000,
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        }).then((response) => {
+            return Promise.resolve(response);
+        }).catch((error) => {
+            return Promise.reject(error);
+        });
+    }
+
+    async getRequiredServiceAcceptedByProvider({status, token}) {
+        console.log("OLHA O STATUUUS")
+        console.log(status)
+        return axios({
+            url: `https://back-service-solutions-edea454839be.herokuapp.com/list-solicitations-by-provider/${status}`,
             method: "GET",
             timeout: 5000,
             headers: {
