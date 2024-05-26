@@ -67,7 +67,9 @@ class ProviderClient {
     }
 
     async getRequiredServiceByProvider({status, token}) {
-        console.log("OLHA O STATUUUS")
+        console.log("Chegou o token asism")
+        console.log(token.token)
+        console.log("Status")
         console.log(status)
         return axios({
             url: `https://back-service-solutions-edea454839be.herokuapp.com/list-solicitations-by-provider/${status}`,
@@ -84,23 +86,24 @@ class ProviderClient {
         });
     }
 
-    async getRequiredServiceAcceptedByProvider({status, token}) {
-        console.log("OLHA O STATUUUS")
-        console.log(status)
+    async updateServiceStatus(solicitationId, status, token) {
+        console.log("ENTROU NO UPDATE")
+        console.log(token)
         return axios({
-            url: `https://back-service-solutions-edea454839be.herokuapp.com/list-solicitations-by-provider/${status}`,
-            method: "GET",
+            url: `https://back-service-solutions-edea454839be.herokuapp.com/update-status/${solicitationId}/${status}`,
+            method: "PATCH",
             timeout: 5000,
             headers: {
                 Accept: 'application/json',
                 Authorization: `Bearer ${token}`
+
             }
         }).then((response) => {
             return Promise.resolve(response);
         }).catch((error) => {
             return Promise.reject(error);
         });
-    }
+    }    
 }
 const providerClient = new ProviderClient()
 export default providerClient;

@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { View, SectionList, LogBox, StyleSheet } from "react-native";
 import CardService from "../../components/CardService";
 import { Text } from "react-native-paper";
 import providerClient from "../../services/ProviderClient";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 
-const ListStatusSolicitations = ({ token }) => {
+const ListStatusSolicitations = ({ route }) => {
+  const { token } = route.params;
+  console.log("o token")
+  console.log(token)
   const navigation = useNavigation();
 
   const [servicesByProvider, setServicesByProvider] = useState([]);
@@ -17,23 +20,26 @@ const ListStatusSolicitations = ({ token }) => {
     'VirtualizedLists should never be nested'
   ]);
 
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await providerClient.getRequiredServiceByProvider({ token: token, status: "APPROVED" });
-        const responseRejected = await providerClient.getRequiredServiceByProvider({ token: token, status: "REJECTED" });
+  const fetchServices = async () => {
+    try {
+      const response = await providerClient.getRequiredServiceByProvider({ token: token, status: "APPROVED" });
+      const responseRejected = await providerClient.getRequiredServiceByProvider({ token: token, status: "REJECTED" });
 
-        setServicesByProvider(response.data);
-        setServicesRejected(responseRejected.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-        setLoading(false);
-      }
-    };
+      setServicesByProvider(response.data);
+      setServicesRejected(responseRejected.data);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchServices();
-  }, [token]);
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true); // Set loading to true every time the screen is focused
+      fetchServices();
+    }, [token])
+  );
 
   const renderCardService = ({ item }) => (
     <CardService
@@ -42,7 +48,7 @@ const ListStatusSolicitations = ({ token }) => {
       nameClient={item.userName}
       local={item.city}
       number={item.phone}
-      onPress={() => navigation.navigate('ServiceSpecifications', item)}
+      onPress={() => navigation.navigate('ServiceSpecifications', { ...item, token })}
     />
   );
 
@@ -65,14 +71,10 @@ const ListStatusSolicitations = ({ token }) => {
         ) : (
           <SectionList
             sections={[
-              { title: "", data: servicesByProvider },
               { title: "", data: servicesRejected },
+              { title: "", data: servicesByProvider },
             ]}
             renderItem={renderCardService}
-            renderSectionHeader={({ section: { title } }) => (
-              <View style={styles.sectionHeader}>
-              </View>
-            )}
             keyExtractor={(item) => item.id.toString()}
           />
         )
@@ -96,7 +98,8 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     backgroundColor: "#f4f4f4",
-    margin: 0
+    margin: 0,
+    padding: 8,
   },
   sectionHeaderText: {
     fontSize: 16,

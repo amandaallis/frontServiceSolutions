@@ -37,6 +37,7 @@ import SucessListServices from './src/pages/listServices/SucessListServices';
 import SucessProvider from './src/pages/registerPersonalProvider/SucessProvider';
 import ListStatusSolicitations from './src/pages/listStatusSolicitations/ListStatusSolicitations';
 import SettingsScreen from './src/pages/SettingsScreen';
+import Rejected from './src/pages/listServices/Rejected';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -52,6 +53,11 @@ function SettingsScreen() {
 */
 const MyTabs = ({route}) => {
     const routeName = getFocusedRouteNameFromRoute(route);
+    const { token } = route.params.params
+    console.log("MyTABS")
+    console.log(route)
+    console.log("token")
+    console.log(token)
 
   return (
     <Tab.Navigator
@@ -76,7 +82,7 @@ const MyTabs = ({route}) => {
       })}
     >
       <Tab.Screen name="Home" component={ServicesHome} options={{ headerShown: true }} />
-      <Tab.Screen name="Status das Solicitações" component={ListStatusSolicitations} options={{ headerShown: true }}/>
+      <Tab.Screen name="Status das Solicitações" component={ListStatusSolicitations} options={{ headerShown: true }}  initialParams={{ token }}/>
       <Tab.Screen name="Histórico de serviços" component={SettingsScreen} options={{ headerShown: false }}/>
       <Tab.Screen name='ChoiceProviderByService' component={ChoiceProviderByService} options={{ headerShown: false, tabBarButton: () => null}}/>
       <Tab.Screen name="NewService" component={NewService} options={{ tabBarButton: () => null, headerShown: false }} />
@@ -128,6 +134,7 @@ function App(): React.JSX.Element {
           <Stack.Screen name='ChoiceProviderByService' component={MyTabs} options={{ headerShown: false}}/>
           <Stack.Screen name='NewService' component={NewService} options={{ headerShown: false }}/>
           <Stack.Screen name='SucessService' component={SucessService} options={{ headerShown: false }}/>
+          <Stack.Screen name='Rejected' component={Rejected} options={{ headerShown: false }}/>
           <Stack.Screen name='ListServicesProvider' component={ListServicesProvider} options={{ headerShown: false }}/>
           <Stack.Screen name='SucessListServices' component={SucessListServices} options={{ headerShown: false }}/>
           <Stack.Screen name='SucessProvider' component={SucessProvider} options={{ headerShown: false }}/>

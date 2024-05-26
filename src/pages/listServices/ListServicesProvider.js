@@ -1,34 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { View, FlatList, LogBox, StyleSheet } from "react-native";
 import CardService from "../../components/CardService";
 import { Text } from "react-native-paper";
 import providerClient from "../../services/ProviderClient";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 
 const ListServicesProvider = ({ token }) => {
+  console.log("list services");
+  console.log(token);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [servicesByProvider, setServicesByProvider] = useState([]);
-  
+
   LogBox.ignoreLogs([
     'VirtualizedLists should never be nested'
   ]);
 
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await providerClient.getRequiredServiceByProvider({ token: token, status: "OPEN" });
-        setServicesByProvider(response.data);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchServices = async () => {
+    try {
+      const response = await providerClient.getRequiredServiceByProvider({ token: token, status: "OPEN" });
+      setServicesByProvider(response.data);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchServices();
-  }, [token]);
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true); // Set loading to true every time the screen is focused
+      fetchServices();
+    }, [token])
+  );
 
   const renderCardService = ({ item }) => (
     <CardService
@@ -37,7 +42,7 @@ const ListServicesProvider = ({ token }) => {
       nameClient={item.userName}
       local={item.city}
       number={item.phone}
-      onPress={() => navigation.navigate('ServiceSpecifications', item)}
+      onPress={() => navigation.navigate('ServiceSpecifications', { ...item, token })}
     />
   );
 

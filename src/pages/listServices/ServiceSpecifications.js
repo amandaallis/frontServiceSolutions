@@ -2,9 +2,29 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Linking } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import providerClient from "../../services/ProviderClient";
 
 const ServiceSpecifications = ({route, navigation}) => {
-    const { userName, city, phone, serviceName, description, adress } = route.params;
+
+    const {token} = route.params;
+    const { id, userName, city, phone, serviceName, description, adress } = route.params;
+    const approved = async () => {
+        try {
+            const send = await providerClient.updateServiceStatus(id, "APPROVED", token)
+            navigation.navigate('SendMessage', { phone: phone })
+        } catch (error) {
+            console.log(error)
+        }
+    } 
+
+    const rejected = async () => {
+    try {
+        const send = await providerClient.updateServiceStatus(id, "REJECTED", token)
+        navigation.navigate('Rejected', {token})
+    } catch (error) {
+        console.log(error)
+    }}
+
     return (
         <View style={styles.container}>
         <View style={styles.card}>
@@ -31,13 +51,13 @@ const ServiceSpecifications = ({route, navigation}) => {
             <View style={styles.buttons}>
             <TouchableOpacity
                 style={styles.buttonAccept}
-                onPress={() => navigation.navigate('SendMessage', { phone: phone })}  
+                onPress={approved}  
             >
                 <Text style={styles.buttonText}>Aceitar</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.buttonReject}
-                onPress={() => console.log("Clicou")}  
+                onPress={rejected}  
             >
                 <Text style={styles.buttonText}>Recusar</Text>
             </TouchableOpacity>
@@ -138,7 +158,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
     }
-      
+
 });
 
 export default ServiceSpecifications;
