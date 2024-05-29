@@ -5,15 +5,12 @@ import { Text } from "react-native-paper";
 import providerClient from "../../services/ProviderClient";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+import CardClient from "../../components/CardClient";
 
-const ListStatusSolicitations = ({ route }) => {
-  const { token } = route.params;
-  console.log("o token")
-  console.log(token)
+const ListStatusSolicitationsRequester = ({ token }) => {
   const navigation = useNavigation();
 
   const [servicesByProvider, setServicesByProvider] = useState([]);
-  const [servicesRejected, setServicesRejected] = useState([]);
   const [loading, setLoading] = useState(true);
 
   LogBox.ignoreLogs([
@@ -22,11 +19,11 @@ const ListStatusSolicitations = ({ route }) => {
 
   const fetchServices = async () => {
     try {
-      const response = await providerClient.getRequiredServiceByProvider({ token: token, status: "APPROVED" });
-      const responseRejected = await providerClient.getRequiredServiceByProvider({ token: token, status: "REJECTED" });
+      const response = await providerClient.getRequiredServiceByRequester({ token: token});
 
+      console.log("OLHA O FETCH")
+      console.log(response.data)
       setServicesByProvider(response.data);
-      setServicesRejected(responseRejected.data);
     } catch (error) {
       console.error("Error fetching services:", error);
     } finally {
@@ -36,18 +33,17 @@ const ListStatusSolicitations = ({ route }) => {
 
   useFocusEffect(
     useCallback(() => {
-      setLoading(true); // Set loading to true every time the screen is focused
+      setLoading(true);
       fetchServices();
     }, [token])
   );
 
   const renderCardService = ({ item }) => (
-    <CardService
+    <CardClient
       text={item.status}
       typeService={"Serviços de " + item.serviceName}
-      nameClient={item.userName}
-      local={item.city}
-      number={item.phone}
+      nameClient={item.providerName}
+      local={item.adress.street + ", " + item.adress.number + ", " +item.adress.district + " " + item.city}
       onPress={() => navigation.navigate('ServiceSpecifications', { ...item, token })}
     />
   );
@@ -64,19 +60,18 @@ const ListStatusSolicitations = ({ route }) => {
           ))}
         </View>
       ) : (
-        servicesByProvider.length === 0 && servicesRejected.length === 0 ? (
+        servicesByProvider.length === 0? (
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text>No data found</Text>
+            <Text>Nenhuma solicitação encontrada</Text>
           </View>
         ) : (
           <SectionList
-            sections={[
-              { title: "", data: servicesRejected },
-              { title: "", data: servicesByProvider },
-            ]}
-            renderItem={renderCardService}
-            keyExtractor={(item) => item.id.toString()}
-          />
+          sections={[
+            { title: "", data: servicesByProvider },
+          ]}
+          renderItem={renderCardService}
+          keyExtractor={(item) => item.id.toString()} // Ensure item.id is unique and defined
+        />
         )
       )}
     </View>
@@ -113,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListStatusSolicitations;
+export default ListStatusSolicitationsRequester;

@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const CardService = ({ text, typeService, nameClient, local, number, onPress }) => {
+const CardClient = ({ text, typeService, nameClient, local, number, onPress }) => {
   let buttonColor;
   if (text === "Aceito") {
     buttonColor = "#1FAF38";
@@ -13,7 +13,8 @@ const CardService = ({ text, typeService, nameClient, local, number, onPress }) 
   } else if(text === "OPEN") {
     buttonColor = "#2D4B73";
     onPress = () => {}
-  } else {
+  }
+  else {
     buttonColor = "#2D4B73";
   }
 
@@ -34,10 +35,6 @@ const CardService = ({ text, typeService, nameClient, local, number, onPress }) 
         <View style={styles.userInfo}>
           <Icon name="map-marker" style={styles.icon}/>
           <Text style={styles.cardDescription}>{local}</Text>
-        </View>
-        <View style={styles.userInfo}>
-          <Icon name="phone" style={styles.icon} />
-          <Text style={styles.cardDescription}>{number}</Text>
         </View>
         <View style={styles.cardActions}>
           <TouchableOpacity
@@ -114,4 +111,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CardService;
+export default CardClient;

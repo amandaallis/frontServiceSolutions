@@ -35,9 +35,10 @@ import ServiceSpecifications from './src/pages/listServices/ServiceSpecification
 import SendMessage from './src/pages/listServices/SendMessage';
 import SucessListServices from './src/pages/listServices/SucessListServices';
 import SucessProvider from './src/pages/registerPersonalProvider/SucessProvider';
-import ListStatusSolicitations from './src/pages/listStatusSolicitations/ListStatusSolicitations';
+import ListStatusSolicitationsProvider from './src/pages/listStatusSolicitations/ListStatusSolicitationsProvider';
 import SettingsScreen from './src/pages/SettingsScreen';
 import Rejected from './src/pages/listServices/Rejected';
+import StatusSolicitationsVerify from './src/pages/listStatusSolicitations/StatusSolicitationsVerify';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -71,9 +72,9 @@ const MyTabs = ({route}) => {
           } else if (route.name === 'Status das Solicitações') {
             iconName = focused ? 'list' : 'list';
             return <Icon name={iconName} size={25} color={focused || routeName === 'NewService' || routeName === 'ChoiceProviderByService' ? "#2D4B73" : "#C8C3C2"} />;
-          } else if(route.name === 'Histórico de serviços') {
+          } /*else if(route.name === 'Histórico de serviços') {
             iconName = focused? 'history' : 'history';
-          }
+          }*/
           return <Icon name={iconName} size={25} color={focused ? "#2D4B73" : "#C8C3C2"} />;
         },
         tabBarActiveTintColor: '#000',
@@ -82,8 +83,7 @@ const MyTabs = ({route}) => {
       })}
     >
       <Tab.Screen name="Home" component={ServicesHome} options={{ headerShown: true }} />
-      <Tab.Screen name="Status das Solicitações" component={ListStatusSolicitations} options={{ headerShown: true }}  initialParams={{ token }}/>
-      <Tab.Screen name="Histórico de serviços" component={SettingsScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Status das Solicitações" component={StatusSolicitationsVerify} options={{ headerShown: true }}  initialParams={{ token }}/>
       <Tab.Screen name='ChoiceProviderByService' component={ChoiceProviderByService} options={{ headerShown: false, tabBarButton: () => null}}/>
       <Tab.Screen name="NewService" component={NewService} options={{ tabBarButton: () => null, headerShown: false }} />
       <Tab.Screen name="ServiceSpecifications" component={ServiceSpecifications} options={{ tabBarButton: () => null, headerShown: false }} />
