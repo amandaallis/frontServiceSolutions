@@ -43,15 +43,6 @@ import StatusSolicitationsVerify from './src/pages/listStatusSolicitations/Statu
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-/*
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Perfil!</Text>
-    </View>
-  );
-}
-*/
 const MyTabs = ({route}) => {
     const routeName = getFocusedRouteNameFromRoute(route);
     const { token } = route.params.params
@@ -71,7 +62,7 @@ const MyTabs = ({route}) => {
             return <Icon name={iconName} size={25} color={focused || routeName === 'NewService' || routeName === 'ChoiceProviderByService' ? "#2D4B73" : "#C8C3C2"} />;
           } else if (route.name === 'Status das Solicitações') {
             iconName = focused ? 'list' : 'list';
-            return <Icon name={iconName} size={25} color={focused || routeName === 'NewService' || routeName === 'ChoiceProviderByService' ? "#2D4B73" : "#C8C3C2"} />;
+            return <Icon name={iconName} size={25} color={focused|| routeName === 'StatusSolicitationsVerify' ? "#2D4B73" : "#C8C3C2"} />;
           } /*else if(route.name === 'Histórico de serviços') {
             iconName = focused? 'history' : 'history';
           }*/
@@ -171,19 +162,6 @@ const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: '#ffffff',
     borderBottomWidth: 1,
-  },
-  indicatorStyle: {
-    backgroundColor: "#d45",
-    padding: 1.5,
-    marginBottom: -2,
-  },
-  divider: {
-    zIndex: 100,
-    position: 'absolute',
-    width: 1,
-    height: 48,
-    backgroundColor: 'black',
-    alignSelf: 'center',
   },
 });
 

@@ -76,9 +76,9 @@ const ChoiceServices = ({ token }) => {
                 >                    
                 <Image
                     style={styles.image}
-                    source={require('../../assets/montador.png')}
+                    source={require('../../assets/montadorDeMoveis.jpg')}
                 />
-                    <Text style={styles.name}>Montador</Text>
+                    <Text style={styles.name}>Montador de Móveis</Text>
                 </TouchableOpacity>
                 <TouchableOpacity  
                     style={styles.card}

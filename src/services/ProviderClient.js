@@ -18,6 +18,8 @@ class ProviderClient {
     }
 
     async newRequester(data) {
+        console.log("estou dentro do newRequester.>")
+        console.log(data)
         return axios({
             url: "https://back-service-solutions-edea454839be.herokuapp.com/register-requester?type=personal",
             method: "POST",

@@ -6,6 +6,7 @@ import providerClient from "../../services/ProviderClient";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 import CardClient from "../../components/CardClient";
+import LottieView from "lottie-react-native";
 
 const ListStatusSolicitationsRequester = ({ token }) => {
   const navigation = useNavigation();
@@ -62,7 +63,12 @@ const ListStatusSolicitationsRequester = ({ token }) => {
       ) : (
         servicesByProvider.length === 0? (
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text>Nenhuma solicitação encontrada</Text>
+            <LottieView
+              source={require("../../assets/noDataSeach.json")}
+              style={{ width: 3000, height: 250}}
+              autoPlay
+              speed={0.8}
+            />
           </View>
         ) : (
           <SectionList

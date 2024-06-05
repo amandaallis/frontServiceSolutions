@@ -7,7 +7,7 @@ const SendMessage = ({route, navigation}) => {
 
     const onPressWhatsApp = () => {
         const phoneNumber = phone;
-        const message = 'Olá, estou interessado no seu serviço.';
+        const message = 'Olá, sou prestador que você encontrou através da Service Solutions. Estou entrando em contato para entender melhor o que você precisa. Como posso te ajudar?';
         const url = `whatsapp://send?phone=${phoneNumber}&text=${message}`;
     
         Linking.openURL(url)

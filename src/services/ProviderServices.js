@@ -33,6 +33,22 @@ class ProviderServices {
         })
     }
 
+    async newProviderPersonal(data) {
+        return axios({
+            url: "https://back-service-solutions-edea454839be.herokuapp.com/register-provider?type=personal",
+            method: "POST",
+            timeout: 5000,
+            data: data,
+            headers: {
+                Accept: 'application/json'
+            }
+        }).then((response) => {
+            return Promise.resolve(response)
+        }).catch((error) => {
+            return Promise.reject(error)
+        })
+    }
+
     async listServices(token) {
         try {
             const response = await axios({
