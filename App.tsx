@@ -46,10 +46,6 @@ const Tab = createBottomTabNavigator();
 const MyTabs = ({route}) => {
     const routeName = getFocusedRouteNameFromRoute(route);
     const { token } = route.params.params
-    console.log("MyTABS")
-    console.log(route)
-    console.log("token")
-    console.log(token)
 
   return (
     <Tab.Navigator

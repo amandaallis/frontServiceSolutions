@@ -4,11 +4,8 @@ import LottieView from  "lottie-react-native";
 import { useNavigation } from '@react-navigation/native';
 
 const Rejected = ({ route }) => {
-    console.log("O token do rejected")
     const {token} = route.params
-    console.log('====================================');
-    console.log(token);
-    console.log('====================================');
+   
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(true);
 

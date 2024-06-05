@@ -112,8 +112,7 @@ const RegisterPersonTwo = ({ route, navigation }) => {
             city: selectedCity,
             cpf
         };
-        console.log(data)
-    
+            
         if (isCorrectFirstPass && firstPassword !== '' && isCorrectPassword && secondPassword !== '') {
             try {
                 const response = await providerServices.newProviderPersonal(data);

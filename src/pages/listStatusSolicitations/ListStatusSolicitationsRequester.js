@@ -21,9 +21,6 @@ const ListStatusSolicitationsRequester = ({ token }) => {
   const fetchServices = async () => {
     try {
       const response = await providerClient.getRequiredServiceByRequester({ token: token});
-
-      console.log("OLHA O FETCH")
-      console.log(response.data)
       setServicesByProvider(response.data);
     } catch (error) {
       console.error("Error fetching services:", error);

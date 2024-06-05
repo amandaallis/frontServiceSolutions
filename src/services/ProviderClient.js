@@ -18,8 +18,6 @@ class ProviderClient {
     }
 
     async newRequester(data) {
-        console.log("estou dentro do newRequester.>")
-        console.log(data)
         return axios({
             url: "https://back-service-solutions-edea454839be.herokuapp.com/register-requester?type=personal",
             method: "POST",
@@ -69,10 +67,6 @@ class ProviderClient {
     }
 
     async getRequiredServiceByProvider({status, token}) {
-        console.log("Chegou o token asism")
-        console.log(token.token)
-        console.log("Status")
-        console.log(status)
         return axios({
             url: `https://back-service-solutions-edea454839be.herokuapp.com/list-solicitations-by-provider/${status}`,
             method: "GET",
@@ -89,8 +83,6 @@ class ProviderClient {
     }
 
     async updateServiceStatus(solicitationId, status, token) {
-        console.log("ENTROU NO UPDATE")
-        console.log(token)
         return axios({
             url: `https://back-service-solutions-edea454839be.herokuapp.com/update-status/${solicitationId}/${status}`,
             method: "PATCH",
@@ -108,8 +100,6 @@ class ProviderClient {
     }    
 
     async getRequiredServiceByRequester({token}) {
-        console.log("Chegou o token asism")
-        console.log(token.token)
         return axios({
             url: `https://back-service-solutions-edea454839be.herokuapp.com/list-solicitations-by-requester`,
             method: "GET",

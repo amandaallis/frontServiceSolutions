@@ -8,8 +8,6 @@ import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 import LottieView from "lottie-react-native";
 
 const ListServicesProvider = ({ token }) => {
-  console.log("list services");
-  console.log(token);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [servicesByProvider, setServicesByProvider] = useState([]);
