@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Alert, Image, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, Image, SectionList, StyleSheet, Text, View, TextInput as TextInput2 } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 import ButtonLogin from '../../components/ButtonLogin';
 import providerClient from '../../services/ProviderClient';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const RegisterClientPageTwo = ({ route, navigation }) => {
     const { name, email, phone } = route.params;
@@ -14,6 +15,13 @@ const RegisterClientPageTwo = ({ route, navigation }) => {
     const [secondPassword, setSecondPassword] = useState('');
     const [isCorrectPassword, setIsCorrectPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isCorrectCity, setIsCorrectCity] = useState(false);
+    const [cities, setCities] = useState([]);
+    const [showCityList, setShowCityList] = useState(true);
+    const [selectedCity, setSelectedCity] = useState('');
+    const [searchText, setSearchText] = useState('');
+    const [filteredCities, setFilteredCities] = useState([]);
+
 
     const onChangeFirstPassword = (value) => {
         setFirstPassword(value);
@@ -52,6 +60,48 @@ const RegisterClientPageTwo = ({ route, navigation }) => {
             setIsLoading(false);
         }
     }
+    useEffect(() => {
+        fetchCities();
+    }, []);
+
+    const fetchCities = async () => {
+        try {
+            const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/municipios');
+            const data = await response.json();
+            const cityNames = data.map(city => `${city.nome} - ${city.microrregiao.mesorregiao.UF.sigla}`);
+            setCities(cityNames);
+            setFilteredCities(cityNames);
+            setIsLoading(false);
+        } catch (error) {
+            console.error('Error fetching cities:', error);
+            setIsLoading(false);
+        }
+    };
+
+    const handleSearch = (text) => {
+        setSearchText(text);
+        const filtered = cities.filter(city => city.toLowerCase().includes(text.toLowerCase()));
+        setFilteredCities(filtered);
+        setShowCityList(true);
+    };
+
+    const selectCity = (city) => {
+        setIsCorrectCity(true);
+        setSelectedCity(city);
+        setSearchText(city.split(' - ')[0]);
+        setShowCityList(false);
+    };
+
+    const renderItem = ({ item }) => {
+        return (
+            <TouchableOpacity
+                style={styles.cityItem}
+                onPress={() => selectCity(item)}
+            >
+                <Text>{item}</Text>
+            </TouchableOpacity>
+        );
+    };
 
     const saveData = async () => {
         setIsLoading(true);
@@ -60,9 +110,10 @@ const RegisterClientPageTwo = ({ route, navigation }) => {
             name,
             phone: phone,
             password: secondPassword,
+            city: selectedCity
         };
     
-        if (isCorrectFirstPass && firstPassword !== '' && isCorrectPassword && secondPassword !== '') {
+        if (isCorrectFirstPass && firstPassword !== '' && isCorrectPassword && secondPassword !== '' && selectedCity !== '') {
             try {
                 const response = await providerClient.newRequester(data);
                 
@@ -95,10 +146,10 @@ const RegisterClientPageTwo = ({ route, navigation }) => {
             />
             <Text style={styles.text}>Ainda não é cadastrado?</Text>
             <Text style={styles.text}>Crie sua conta agora mesmo!</Text>
-
+    
             <View>
                 <Text style={styles.textLabel}>Senha</Text>
-
+    
                 <TextInput
                     style={styles.input}
                     value={firstPassword}
@@ -113,10 +164,10 @@ const RegisterClientPageTwo = ({ route, navigation }) => {
                     outlineColor='#FFF'
                     activeUnderlineColor='transparent'
                 />
-
+    
                 {!isCorrectFirstPass && <Text style={{ color: '#EFFE0B' }}>Senha deve ter mais de 6 caracteres</Text>}
             </View>
-
+    
             <View>
                 <Text style={styles.textLabel}>Confirmar Senha:</Text>
                 <TextInput
@@ -135,9 +186,32 @@ const RegisterClientPageTwo = ({ route, navigation }) => {
                 />
                 {!isCorrectPassword && <Text style={{ color: '#EFFE0B' }}>Senhas divergentes</Text>}
             </View>
+
+            <View style={styles.inputContainer}>
+                <Text style={styles.textLabel}>Cidade{!isCorrectCity && <Text style={{ color: '#b80b0b' }}>*</Text>}</Text>
+                <View style={styles.cityList}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Digite a cidade"
+                        onChangeText={handleSearch}
+                        value={searchText}
+                        onFocus={() => setShowCityList(true)}
+                    />
+                    {isLoading ? (
+                        <Text>Carregando cidades...</Text>
+                    ) : showCityList ? (
+                        <SectionList
+                            sections={[{ title: 'Cidades', data: filteredCities }]}
+                            renderItem={renderItem}
+                            keyExtractor={(item, index) => index.toString()}
+                            style={styles.cityFlatList}
+                        />
+                    ) : null}
+                </View>
+            </View>
+
             <ButtonLogin text="Próximo" onPress={saveData} />
             {isLoading ? <ActivityIndicator size="large" color="#FFFFFF"/> : null}
-
         </View>
     );
 }
@@ -157,9 +231,15 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         color: '#FFFFFF',
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    textLabel: {
+        margin: 10,
+        color:"#FFF",
     },
     input: {
-        backgroundColor: '#FFFF',
+        backgroundColor: '#FFFFFF',
         width: 310,
         height: 40,
         borderColor: '#FFF',
@@ -167,10 +247,27 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         marginBottom: 10,
     },
-    textLabel: {
-        margin: 10,
-        color: "#FFF",
+    cityItem: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#DDD',
     },
-})
+    inputContainer: {
+        marginBottom: 20,
+    },
+    cityList: {
+        backgroundColor: '#FFFFFF',
+        width: 310,
+        maxHeight: 200,
+        borderColor: 'black',
+        borderWidth: 1,
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        marginBottom: 10,
+    },
+    cityFlatList: {
+        flexGrow: 0,
+    },
+});
 
 export default RegisterClientPageTwo;

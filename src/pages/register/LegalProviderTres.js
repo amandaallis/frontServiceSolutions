@@ -42,8 +42,6 @@ const LegalProvider = ({ route, navigation }) => {
                 phone: phone,
                 password: secondPassword
             };
-
-            console.log("Chegou aqui no loginData")
            
             const loginResponse = await providerServices.login(loginData);  
 
@@ -59,7 +57,6 @@ const LegalProvider = ({ route, navigation }) => {
     }
 
     const saveData = async () => {
-        console.log(razaoSocial)
         setIsLoading(true);
         const data = {
             email: email,
@@ -69,8 +66,6 @@ const LegalProvider = ({ route, navigation }) => {
             companyName: razaoSocial,
             city: cidade
         };
-
-        console.log(data)
     
         if (isCorrectFirstPass && firstPassword !== '' && isCorrectPassword && secondPassword !== '') {
             try {

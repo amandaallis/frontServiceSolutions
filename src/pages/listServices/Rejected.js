@@ -1,13 +1,16 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { Modal, StyleSheet, Text, View, BackHandler } from "react-native";
 import LottieView from  "lottie-react-native";
+import { useNavigation } from '@react-navigation/native';
 
-const SucessService = ({ route, navigation }) => {
+const Rejected = ({ route }) => {
+    const {token} = route.params
+   
+    const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(true);
-    const { token } = route.params;
-    let timer;
 
     useLayoutEffect(() => {
+        let timer;
         navigation.setOptions({
             gestureEnabled: false
         });
@@ -29,10 +32,13 @@ const SucessService = ({ route, navigation }) => {
     }, [navigation]);
 
     useEffect(() => {
-        timer = setTimeout(() => {
+        const timer = setTimeout(() => {
             setModalVisible(false);
-            navigation.goBack();
-        }, 7000);
+            navigation.navigate('ServicesHome', { 
+                screen: 'Home', 
+                params: {token}
+              });     
+        }, 6000);
 
         return () => clearTimeout(timer);
 
@@ -50,18 +56,17 @@ const SucessService = ({ route, navigation }) => {
             >
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                     <LottieView
-                        source={require("../../assets/sucess.json")}
+                        source={require("../../assets/recusado.json")}
                         style={{ width: '100%', height: '50%'}}
                         autoPlay
                         speed={0.5}
                     />
-                    <Text style={styles.text}> Sua solicitação de serviço foi enviada com sucesso!</Text>
+                    <Text style={styles.text}> Serviço recusado</Text>
                 </View>
             </Modal>
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     text: {
@@ -71,4 +76,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SucessService;
+export default Rejected;

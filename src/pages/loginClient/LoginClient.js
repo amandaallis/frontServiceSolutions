@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, Alert } from 'react-native';
 import ButtonLogin from '../../components/ButtonLogin';
 import { TextInputMask } from 'react-native-masked-text';
 import providerClient from '../../services/ProviderClient';
-import providerServices from '../../services/ProviderServices';
+import { ActivityIndicator, TextInput as PaperTextInput } from 'react-native-paper';
+
 
 const LoginClient = ({navigation}) => {
   const [phone, setPhone] = useState('');
@@ -11,13 +12,17 @@ const LoginClient = ({navigation}) => {
   const [isCorrectPhone, setIsCorrectPhone] = useState(true);
   const [isCorrectPass, setIsCorrectPass] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [hidePass, setHidePass] = useState(true);
 
+  const togglePasswordVisibility = () => {
+    setHidePass(!hidePass);
+  };
 
   const onChangePhone = (value) => {
     setIsLoading(false)
+    setPhone(value)
 
     if (value.length == 14) {
-      setPhone(value)
 
       setIsCorrectPhone(true);
     } else {
@@ -46,7 +51,6 @@ const LoginClient = ({navigation}) => {
       const response = await providerClient.login(data);
       
       if(response && response.status == 200) {
-        console.log("Entrou no response data")
         navigation.navigate('ServicesHome', { 
           screen: 'Home', 
           params: { token: response.data.token } 
@@ -79,27 +83,26 @@ const LoginClient = ({navigation}) => {
         <TextInputMask
           style={styles.input}
           type={'cel-phone'}
-          options={{
-            maskType: 'BRL',
-            withDDD: true,
-            dddMask: '(44)'
-          }}
+          options={{ maskType: 'BRL', withDDD: true, dddMask: '(99)' }}
           value={phone}
           onChangeText={onChangePhone}
           placeholder="Digite aqui seu telefone"
         />
+        
        {!isCorrectPhone && <Text style={{ color: '#EFFE0B' }}>O número de telefone é obrigatório</Text>}
       </View>
 
       <View>
         <Text style={styles.textLabel}>Senha:</Text>
-        <TextInput
+        <PaperTextInput
           style={styles.input}
-          placeholder="Digite aqui sua senha"
-          secureTextEntry={true}
-          maxLength={30}
           value={password}
           onChangeText={onChangePass}
+          maxLength={30}
+          secureTextEntry={hidePass}
+          placeholder="Digite aqui sua senha"
+          autoCapitalize="none"
+          right={<PaperTextInput.Icon icon={hidePass ? "eye" : "eye-off"} onPress={togglePasswordVisibility} />}
         />
        {!isCorrectPass && <Text style={{ color: '#EFFE0B' }}>Senha é obrigatória</Text>}
       </View>

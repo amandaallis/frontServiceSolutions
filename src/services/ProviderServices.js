@@ -33,6 +33,22 @@ class ProviderServices {
         })
     }
 
+    async newProviderPersonal(data) {
+        return axios({
+            url: "https://back-service-solutions-edea454839be.herokuapp.com/register-provider?type=personal",
+            method: "POST",
+            timeout: 5000,
+            data: data,
+            headers: {
+                Accept: 'application/json'
+            }
+        }).then((response) => {
+            return Promise.resolve(response)
+        }).catch((error) => {
+            return Promise.reject(error)
+        })
+    }
+
     async listServices(token) {
         try {
             const response = await axios({
@@ -92,10 +108,10 @@ class ProviderServices {
                 Authorization: `Bearer ${token}`
             }
         }).then((response) => {
-            console.log("Response:", response.data);  // Log da resposta
+            console.log("Response:", response.data);
             return Promise.resolve(response);
         }).catch((error) => {
-            console.log("Error:", error);  // Log do erro
+            console.log("Error:", error);
             return Promise.reject(error);
         });
     }
@@ -116,8 +132,6 @@ class ProviderServices {
     }
 
     async getProvidersByServices(token, service) {
-        console.log("Entrou no getProvider")
-        console.log(service)
         const url = `https://back-service-solutions-edea454839be.herokuapp.com/available-provider/${service}`;
         try {
             const response = await axios({
@@ -127,6 +141,22 @@ class ProviderServices {
                 headers: {
                     Accept: 'application/json',
                     Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async getTypeServiceById (id) {
+        const url = `https://back-service-solutions-edea454839be.herokuapp.com/service/${id}`;
+        try {
+            const response = await axios({
+                url: url,
+                method: "GET",
+                timeout: 5000,
+                headers: {
+                    Accept: 'application/json',
                 }
             });
             return response.data;

@@ -19,7 +19,7 @@ class ProviderClient {
 
     async newRequester(data) {
         return axios({
-            url: "https://back-service-solutions-edea454839be.herokuapp.com/register-requester",
+            url: "https://back-service-solutions-edea454839be.herokuapp.com/register-requester?type=personal",
             method: "POST",
             timeout: 5000,
             data: data,
@@ -65,6 +65,55 @@ class ProviderClient {
             return Promise.reject(error);
         });
     }
+
+    async getRequiredServiceByProvider({status, token}) {
+        return axios({
+            url: `https://back-service-solutions-edea454839be.herokuapp.com/list-solicitations-by-provider/${status}`,
+            method: "GET",
+            timeout: 5000,
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        }).then((response) => {
+            return Promise.resolve(response);
+        }).catch((error) => {
+            return Promise.reject(error);
+        });
+    }
+
+    async updateServiceStatus(solicitationId, status, token) {
+        return axios({
+            url: `https://back-service-solutions-edea454839be.herokuapp.com/update-status/${solicitationId}/${status}`,
+            method: "PATCH",
+            timeout: 5000,
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+
+            }
+        }).then((response) => {
+            return Promise.resolve(response);
+        }).catch((error) => {
+            return Promise.reject(error);
+        });
+    }    
+
+    async getRequiredServiceByRequester({token}) {
+        return axios({
+            url: `https://back-service-solutions-edea454839be.herokuapp.com/list-solicitations-by-requester`,
+            method: "GET",
+            timeout: 5000,
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        }).then((response) => {
+            return Promise.resolve(response);
+        }).catch((error) => {
+            return Promise.reject(error);
+        });
+    } 
 }
 const providerClient = new ProviderClient()
 export default providerClient;

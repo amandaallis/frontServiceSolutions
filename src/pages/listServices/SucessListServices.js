@@ -2,12 +2,11 @@ import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { Modal, StyleSheet, Text, View, BackHandler } from "react-native";
 import LottieView from  "lottie-react-native";
 
-const SucessService = ({ route, navigation }) => {
+const SucessListServices = ({ navigation, phone }) => {
     const [modalVisible, setModalVisible] = useState(true);
-    const { token } = route.params;
-    let timer;
 
     useLayoutEffect(() => {
+        let timer;
         navigation.setOptions({
             gestureEnabled: false
         });
@@ -29,10 +28,10 @@ const SucessService = ({ route, navigation }) => {
     }, [navigation]);
 
     useEffect(() => {
-        timer = setTimeout(() => {
+        const timer = setTimeout(() => {
             setModalVisible(false);
-            navigation.goBack();
-        }, 7000);
+            navigation.navigate('SendMessage', phone);
+        }, 4000);
 
         return () => clearTimeout(timer);
 
@@ -55,13 +54,12 @@ const SucessService = ({ route, navigation }) => {
                         autoPlay
                         speed={0.5}
                     />
-                    <Text style={styles.text}> Sua solicitação de serviço foi enviada com sucesso!</Text>
+                    <Text style={styles.text}> Serviço aceito com sucesso!</Text>
                 </View>
             </Modal>
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     text: {
@@ -71,4 +69,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SucessService;
+export default SucessListServices;

@@ -4,9 +4,10 @@ import { ActivityIndicator, TextInput } from 'react-native-paper';
 import ButtonLogin from '../../components/ButtonLogin';
 import providerClient from '../../services/ProviderClient';
 import { FlatList } from 'react-native-gesture-handler';
+import providerServices from '../../services/ProviderServices';
 
 const RegisterPersonTwo = ({ route, navigation }) => {
-    const { name, email, phone } = route.params;
+    const { name, email, phone, cpf } = route.params;
 
     const [hidePass1, setHidePass1] = useState(true);
     const [hidePass2, setHidePass2] = useState(true);
@@ -88,7 +89,7 @@ const RegisterPersonTwo = ({ route, navigation }) => {
                 password: secondPassword
             };
                         
-            const loginResponse = await providerClient.login(loginData);  
+            const loginResponse = await providerServices.login(loginData);  
 
             if (loginResponse.status === 200) {
                 navigation.navigate('TypeServiceChoice', loginResponse.data );
@@ -108,13 +109,13 @@ const RegisterPersonTwo = ({ route, navigation }) => {
             name,
             phone: phone,
             password: secondPassword,
-            city: selectedCity
+            city: selectedCity,
+            cpf
         };
-        console.log(data)
-    
+            
         if (isCorrectFirstPass && firstPassword !== '' && isCorrectPassword && secondPassword !== '') {
             try {
-                const response = await providerClient.newRequester(data);
+                const response = await providerServices.newProviderPersonal(data);
 
                 if (response !== null) {
                     await loginNextPage();

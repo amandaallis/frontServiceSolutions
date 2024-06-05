@@ -47,7 +47,7 @@ const TypeServiceChoice = ({ route, navigation }) => {
     const saveData = async (data) => {
         try {
             const response = await providerServices.newTypeService(data, token);
-            navigation.navigate('Sucess')
+            navigation.navigate('SucessProvider', { token });
         } catch (error) {
             console.log(error)
         }

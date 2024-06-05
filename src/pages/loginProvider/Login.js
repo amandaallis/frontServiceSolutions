@@ -1,78 +1,69 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, Alert } from 'react-native';
 import ButtonLogin from '../../components/ButtonLogin';
+import { ActivityIndicator, TextInput as PaperTextInput } from 'react-native-paper';
 import providerServices from "../../services/ProviderServices";
 import { TextInputMask } from 'react-native-masked-text';
 
 const Login = ({navigation}) => {
-  console.log("Acabou de entrar no navigation")
-  console.log(navigation)
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [isCorrectPhone, setIsCorrectPhone] = useState(true);
   const [isCorrectPass, setIsCorrectPass] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [hidePass, setHidePass] = useState(true);
 
   const onChangePhone = (value) => {
-    setIsLoading(false)
+    setIsLoading(false);
+    setPhone(value);
 
-    if (value.length == 15) {
-      setPhone(value)
-
+    if (value.length === 14) {
       setIsCorrectPhone(true);
     } else {
       setIsCorrectPhone(false);
     }
-  }
+  };
+
+  const togglePasswordVisibility = () => {
+    setHidePass(!hidePass);
+  };
 
   const onChangePass = (value) => {
-    setIsLoading(false)
-    setPassword(value)
+    setIsLoading(false);
+    setPassword(value);
+
     if (value.length > 0) {
       setIsCorrectPass(true);
     } else {
       setIsCorrectPass(false);
     }
-  }
+  };
 
   const handleSignIn = async () => {
     try {
-      const data = {
-        phone,
-        password
-      };
+      const data = { phone, password };
       setIsLoading(true);
-
-
       const response = await providerServices.login(data);
-      
-      if(response && response.status == 200) {
-        console.log("Entrou no response data")
-        console.log(response.data)
+      if (response && response.status === 200) {
         navigation.navigate('ServicesHome', { 
           screen: 'Home', 
           params: { token: response.data.token } 
-        });       }
-      
+        });       
+      }
     } catch (error) {
       Alert.alert("Dados errados, tente novamente");
       setIsLoading(false);
       console.log(error);
-    }
-    finally {
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
       setIsCorrectPhone(true);
-      setIsCorrectPass(true)
+      setIsCorrectPass(true);
     }
   };
-  
+
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.image}
-        source={require('../../assets/logoLogin.png')}
-      />
-
+      <Image style={styles.image} source={require('../../assets/logoLogin.png')} />
       <Text style={styles.welcomeText}>Seja bem-vindo(a)!</Text>
       <Text style={styles.welcomeTextSecond}>Acesse sua conta!</Text>
 
@@ -81,25 +72,29 @@ const Login = ({navigation}) => {
         <TextInputMask
           style={styles.input}
           type={'cel-phone'}
+          options={{ maskType: 'BRL', withDDD: true, dddMask: '(99)' }}
           value={phone}
           onChangeText={onChangePhone}
           placeholder="Digite aqui seu telefone"
         />
-       {!isCorrectPhone && <Text style={{ color: '#EFFE0B' }}>O número de telefone é obrigatório</Text>}
+        {!isCorrectPhone && <Text style={{ color: '#EFFE0B' }}>O número de telefone é obrigatório</Text>}
       </View>
 
       <View>
         <Text style={styles.textLabel}>Senha:</Text>
-        <TextInput
+        <PaperTextInput
           style={styles.input}
-          placeholder="Digite aqui sua senha"
-          secureTextEntry={true}
-          maxLength={30}
           value={password}
           onChangeText={onChangePass}
+          maxLength={30}
+          secureTextEntry={hidePass}
+          placeholder="Digite aqui sua senha"
+          autoCapitalize="none"
+          right={<PaperTextInput.Icon icon={hidePass ? "eye" : "eye-off"} onPress={togglePasswordVisibility} />}
         />
-       {!isCorrectPass && <Text style={{ color: '#EFFE0B' }}>Senha é obrigatória</Text>}
+        {!isCorrectPass && <Text style={{ color: '#EFFE0B' }}>Senha é obrigatória</Text>}
       </View>
+
       <ButtonLogin text="Acessar" onPress={handleSignIn} />
       <Text style={{color: '#FFFFFF', marginTop: 10}}>Ainda não é cadastrado?</Text>
       <Text style={{color: '#FFFFFF', marginTop: 5}} onPress={() => navigation.navigate('Cadastro')}>Crie sua conta agora mesmo!</Text>

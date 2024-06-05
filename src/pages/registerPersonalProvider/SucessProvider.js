@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { Modal, StyleSheet, Text, View, BackHandler } from "react-native";
 import LottieView from  "lottie-react-native";
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-const SucessService = ({ route, navigation }) => {
-    const [modalVisible, setModalVisible] = useState(true);
+const SucessProvider = () => {
+    const navigation = useNavigation();
+    const route = useRoute();
     const { token } = route.params;
-    let timer;
+    const [modalVisible, setModalVisible] = useState(true);
+    
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -29,10 +32,14 @@ const SucessService = ({ route, navigation }) => {
     }, [navigation]);
 
     useEffect(() => {
-        timer = setTimeout(() => {
+        const timer = setTimeout(() => {
             setModalVisible(false);
-            navigation.goBack();
-        }, 7000);
+           
+            navigation.navigate('ServicesHome', { 
+                screen: 'Home', 
+                params: {token}
+              });     
+        }, 4000);
 
         return () => clearTimeout(timer);
 
@@ -55,13 +62,12 @@ const SucessService = ({ route, navigation }) => {
                         autoPlay
                         speed={0.5}
                     />
-                    <Text style={styles.text}> Sua solicitação de serviço foi enviada com sucesso!</Text>
+                    <Text style={styles.text}> Sua conta foi criada com sucesso!</Text>
                 </View>
             </Modal>
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     text: {
@@ -71,4 +77,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SucessService;
+export default SucessProvider;

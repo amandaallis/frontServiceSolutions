@@ -3,8 +3,10 @@ import { StyleSheet, View, ScrollView } from 'react-native';
 import ChoiceServices from '../choiceServices/ChoiceServices';
 import ListServicesProvider from '../listServices/ListServicesProvider';
 import providerServices from '../../services/ProviderServices';
+import ListStatusSolicitationsProvider from './ListStatusSolicitationsProvider';
+import ListStatusSolicitationsRequester from './ListStatusSolicitationsRequester';
 
-const ServicesHome = ({ route, navigation }) => {
+const StatusSolicitationsVerify = ({ route, navigation }) => {
   const { token } = route.params;
   const [type, setType] = useState('');
 
@@ -31,8 +33,8 @@ const ServicesHome = ({ route, navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.background}>
-        {type === 'requester' && <ChoiceServices token={token} />}
-        {type === 'provider' && <ListServicesProvider token={token} />}
+        {type === 'requester' && <ListStatusSolicitationsRequester token={token} />}
+        {type === 'provider' && <ListStatusSolicitationsProvider token={token}/>}
       </View>
     </ScrollView>
   );
@@ -50,4 +52,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ServicesHome;
+export default StatusSolicitationsVerify;

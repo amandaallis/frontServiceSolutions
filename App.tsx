@@ -9,7 +9,6 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import Choice from './src/pages/choice/Choice';
-import ListServices from './src/pages/listServices/ListServices';
 import Register from './src/pages/register/Register';
 import LegalProvider from './src/pages/register/LegalProvider';
 import LegalProviderDois from './src/pages/register/LegalProviderDois';
@@ -31,21 +30,22 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import ChoiceProviderByService from './src/pages/choiceServices/ChoiceProviderByService';
 import NewService from './src/pages/choiceServices/NewService';
 import SucessService from './src/pages/choiceServices/SucessService';
+import ListServicesProvider from './src/pages/listServices/ListServicesProvider';
+import ServiceSpecifications from './src/pages/listServices/ServiceSpecifications';
+import SendMessage from './src/pages/listServices/SendMessage';
+import SucessListServices from './src/pages/listServices/SucessListServices';
+import SucessProvider from './src/pages/registerPersonalProvider/SucessProvider';
+import ListStatusSolicitationsProvider from './src/pages/listStatusSolicitations/ListStatusSolicitationsProvider';
+import SettingsScreen from './src/pages/SettingsScreen';
+import Rejected from './src/pages/listServices/Rejected';
+import StatusSolicitationsVerify from './src/pages/listStatusSolicitations/StatusSolicitationsVerify';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Perfil!</Text>
-    </View>
-  );
-}
-
 const MyTabs = ({route}) => {
     const routeName = getFocusedRouteNameFromRoute(route);
+    const { token } = route.params.params
 
   return (
     <Tab.Navigator
@@ -58,9 +58,10 @@ const MyTabs = ({route}) => {
             return <Icon name={iconName} size={25} color={focused || routeName === 'NewService' || routeName === 'ChoiceProviderByService' ? "#2D4B73" : "#C8C3C2"} />;
           } else if (route.name === 'Status das Solicitações') {
             iconName = focused ? 'list' : 'list';
-          } else if(route.name === 'Histórico de serviços') {
+            return <Icon name={iconName} size={25} color={focused|| routeName === 'StatusSolicitationsVerify' ? "#2D4B73" : "#C8C3C2"} />;
+          } /*else if(route.name === 'Histórico de serviços') {
             iconName = focused? 'history' : 'history';
-          }
+          }*/
           return <Icon name={iconName} size={25} color={focused ? "#2D4B73" : "#C8C3C2"} />;
         },
         tabBarActiveTintColor: '#000',
@@ -69,17 +70,18 @@ const MyTabs = ({route}) => {
       })}
     >
       <Tab.Screen name="Home" component={ServicesHome} options={{ headerShown: true }} />
-      <Tab.Screen name="Status das Solicitações" component={SettingsScreen} options={{ headerShown: false }}/>
-      <Tab.Screen name="Histórico de serviços" component={SettingsScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Status das Solicitações" component={StatusSolicitationsVerify} options={{ headerShown: true }}  initialParams={{ token }}/>
       <Tab.Screen name='ChoiceProviderByService' component={ChoiceProviderByService} options={{ headerShown: false, tabBarButton: () => null}}/>
       <Tab.Screen name="NewService" component={NewService} options={{ tabBarButton: () => null, headerShown: false }} />
+      <Tab.Screen name="ServiceSpecifications" component={ServiceSpecifications} options={{ tabBarButton: () => null, headerShown: false }} />
+      <Tab.Screen name="SendMessage" component={SendMessage} options={{ tabBarButton: () => null, headerShown: false }} />
     </Tab.Navigator>
   );
 };
 
 
 function App(): React.JSX.Element {
-  useEffect(() => {
+ /* useEffect(() => {
     const backAction = () => {
       return true; // Impede a navegação de voltar
     };
@@ -90,7 +92,7 @@ function App(): React.JSX.Element {
     );
 
     return () => backHandler.remove();
-  }, []);
+  }, []);*/
 
   return (
     <SafeAreaView style={styles.backgroundStyle}>
@@ -102,7 +104,6 @@ function App(): React.JSX.Element {
           }}
         >
           <Stack.Screen name='Login' component={Login} options={{ headerShown: false }}/>
-          <Stack.Screen name='ListServices' component={ListServices} options={{ headerShown: false }}/>
           <Stack.Screen name='Choice' component={Choice} options={{ headerShown: false }}/>       
           <Stack.Screen name='Cadastro' component={Register} options={{ headerShown: false }}/>
           <Stack.Screen name='LegalProvider' component={LegalProvider} options={{ headerShown: false }}/>
@@ -120,6 +121,10 @@ function App(): React.JSX.Element {
           <Stack.Screen name='ChoiceProviderByService' component={MyTabs} options={{ headerShown: false}}/>
           <Stack.Screen name='NewService' component={NewService} options={{ headerShown: false }}/>
           <Stack.Screen name='SucessService' component={SucessService} options={{ headerShown: false }}/>
+          <Stack.Screen name='Rejected' component={Rejected} options={{ headerShown: false }}/>
+          <Stack.Screen name='ListServicesProvider' component={ListServicesProvider} options={{ headerShown: false }}/>
+          <Stack.Screen name='SucessListServices' component={SucessListServices} options={{ headerShown: false }}/>
+          <Stack.Screen name='SucessProvider' component={SucessProvider} options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
@@ -153,19 +158,6 @@ const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: '#ffffff',
     borderBottomWidth: 1,
-  },
-  indicatorStyle: {
-    backgroundColor: "#d45",
-    padding: 1.5,
-    marginBottom: -2,
-  },
-  divider: {
-    zIndex: 100,
-    position: 'absolute',
-    width: 1,
-    height: 48,
-    backgroundColor: 'black',
-    alignSelf: 'center',
   },
 });
 
