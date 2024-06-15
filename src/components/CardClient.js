@@ -11,6 +11,7 @@ const CardClient = ({ text, typeService, nameClient, local, number, onPress }) =
     buttonColor = "#FF0A0AB2";
     onPress = () => {}
   } else if(text === "OPEN") {
+    text = "Em Análise"
     buttonColor = "#2D4B73";
     onPress = () => {}
   }
